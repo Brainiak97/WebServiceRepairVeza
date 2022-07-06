@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model IdentityRole<int>
+
+<div asp-validation-summary="All" class="text-danger"></div>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="Id" />
+    <input type="hidden" asp-for="ConcurrencyStamp" />
+    <input type="hidden" asp-for="NormalizedName" />
+
+    <div class="form-group">
+        <label asp-for="Name" class="control-label"></label>
+        <input type="text" asp-for="Name" class="form-control" />
+    </div>
+    <br />
+    <button type="submit" class="btn btn-secondary">Сохранить</button>
+</form>

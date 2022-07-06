@@ -1,0 +1,63 @@
+﻿@model WebService.Models.ViewModels.RepairLog.RepairLogViewModel
+@inject BLL.Services.RepairGroupService RepaiGroupService
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Создание</h1>
+
+<h4>Заявка на ремонт</h4>
+<hr />
+<div class="row">
+    <form asp-action="Create">
+        <div class="form-group">
+            <label asp-for="Malfunctions" class="control-label"></label>
+            <textarea rows="3" asp-for="Malfunctions" class="form-control"></textarea>
+            <span asp-validation-for="Malfunctions" class="text-danger"></span>
+        </div>
+        <label asp-for="RepairGroups" class="control-label"></label>
+        <div class="form-group" id="controls">
+            @{
+                var allGroups = await RepaiGroupService.GetItems();
+                @if (allGroups.Count() > 1)
+                {
+                    <input type="checkbox" id="checkboxAll">
+                    <lable>Отметить / снять все</lable>
+                    <br />
+                }
+                @foreach (var group in await RepaiGroupService.GetItems())
+                {
+                    <input id="checkboxId" type="checkbox" class="checkBoxClass" name="groups" value="@group.Name" /> @group.Name <br />
+                }
+            }
+        </div>
+        <br />
+        <div class="form-group">
+            <input id="submitForm" type="submit" value="Создать" class="btn btn-secondary" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    <script type="text/javascript">
+        (function($) { })(jQuery);
+
+        $('#checkboxAll').click(function() {
+            if ($(this).is(':checked')) {
+                $('#controls input:checkbox').prop('checked', true);
+            } else if (!$(this).is(':checked')) {
+                $('#controls input:checkbox').prop('checked', false);
+            }
+        });
+
+        $('.checkBoxClass').on('change', function() {
+            if ($('.checkBoxClass:checked').length != $('.checkBoxClass').length)
+                $('#checkboxAll').prop('checked', false);
+            else $('#checkboxAll').prop('checked', true);
+        });
+    </script>
+
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

@@ -1,0 +1,61 @@
+﻿@model WebService.Models.ViewModels.RepairLog.RepairLogViewModel
+<script src="https://unpkg.com/@@aspnet/signalr@@1.0.0-rc1-final/dist/browser/signalr.js"></script>
+
+@using BLL.Models
+@using WebService.Models.ViewModels.Comment
+@{
+    ViewData["Title"] = "Index";
+}
+
+<h2></h2>
+
+<a href="javascript:history.go(-1)"
+   class="btn btn-outline-dark">
+    Вернуться к журналу
+</a>
+
+<div id="logdetails-@Model.Id">
+    @{
+        await Html.RenderPartialAsync("DetailsPartial", Model);
+    }
+</div>
+
+<div class="row justify-content-center ">
+    <div class="col-md-8 overflow-auto">
+        @{
+            await Html.RenderPartialAsync("CommentsPartial", new CommentViewModel { RepairLogId = Model.Id }, new ViewDataDictionary(ViewData) { { "status", Model.Status } });
+        }
+    </div>
+</div>
+
+<script>
+    const logDetailsConnection = new signalR.HubConnectionBuilder()
+        .withUrl("/repairlogdetails")
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+    logDetailsConnection.on('UpdateLog', (logId) => {
+        $.ajax(
+            {
+                url: '/RepairLog/UpdateDatails',
+                type: 'GET',
+                data: { logId: logId },
+
+                success: function(partialView) {
+                    $(`#logdetails-${logId}`).html(partialView);
+                    console.log(`logdetails-${logId} updated`);
+                }
+            });
+    });
+
+    logDetailsConnection.onclose(() => {
+        console.log('logDetailsHub disconnected!');
+    })
+
+    logDetailsConnection.start().then(function() {
+        logDetailsConnection.invoke("EnterInLogGroup", @Model.Id);
+        console.log('logDetailsHub connected!');
+    }).catch(function(err) {
+        console.log('logDetailsHub connection error!');
+    });
+</script>

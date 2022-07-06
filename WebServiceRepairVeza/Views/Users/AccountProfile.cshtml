@@ -1,0 +1,38 @@
+﻿@using WebService.Models.ViewModels.User
+@model WebService.Models.ViewModels.User.UserViewModel
+@{
+    ViewData["Title"] = "AccountProfile";
+}
+
+<div class="container justify-content-center d-flex">
+    <div class="nav flex-column nav-pills me-3 justify-content-start" id="v-pills-tab" role="tablist" aria-orientation="vertical">
+        <button class="nav-link active" id="v-pills-personalInfo-tab"
+                data-bs-toggle="pill" data-bs-target="#v-pills-personalInfo" type="button" role="tab" aria-controls="v-pills-personalInfo" aria-selected="true">
+            Личные данные
+        </button>
+        <button class="nav-link" id="v-pills-securityInfo-tab"
+                data-bs-toggle="pill" data-bs-target="#v-pills-securityInfo" type="button" role="tab" aria-controls="v-pills-securityInfo" aria-selected="false">
+            Безопасность и вход
+        </button>
+    </div>
+    <div class="tab-content" id="v-pills-tabContent">
+        <div class="tab-pane fade show active" id="v-pills-personalInfo" role="tabpanel" aria-labelledby="v-pills-personalInfo-tab">
+            @{
+                await Html.RenderPartialAsync("ChangePersonalInfo", new UserViewModel
+            {
+                Id = Model.Id,
+                UserName = Model.UserName,
+                Name = Model.Name,
+                SurName = Model.SurName,
+                MiddleName = Model.MiddleName,
+                PhoneNumber = Model.PhoneNumber
+            });
+            }
+        </div>
+        <div class="tab-pane fade show" id="v-pills-securityInfo" role="tabpanel" aria-labelledby="v-pills-securityInfo-tab">
+            @{
+                await Html.RenderPartialAsync("ChangePersonalPassword", new ChangePasswordViewModel() { Id = Model.Id, UserName = Model.UserName });
+            }
+        </div>
+    </div>
+</div>

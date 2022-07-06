@@ -1,0 +1,100 @@
+﻿@model WebService.Models.ViewModels.Comment.CommentViewModel
+
+<table class="table table-hover">
+    <tbody id="comments"></tbody>
+</table>
+
+<template id="commentTemplate">
+    <tr>
+        <td>
+            <input type="hidden" id="index" />
+
+            <div class="row">
+                <div class="col-md-8 col-sm-8">
+                    <h6 id="commentator">
+                        Morgan Freeman
+                    </h6>
+                </div>
+                <div class="col-md-4 col-sm-4">
+                    <span id="datespan" class="justify-content-end">Jan 29, 2020</span>
+                </div>
+            </div>
+            <div class="row text-break">
+                <span id="text" class="justify-content-start text-break">thisistext</span>
+            </div>
+        </td>
+    </tr>
+</template>
+
+@if ((Core.Models.RepairStatus)ViewData["status"] != Core.Models.RepairStatus.Archive)
+{
+    <form id="commentForm">
+        <legend>Оставьте свой комментарий</legend>
+        <div asp-validation-summary="ModelOnly"></div>
+        <input id="hiddenLogId" type="hidden" asp-for="RepairLogId" />
+        <div>
+            <p><textarea rows="5" id="commentText" type="text" placeholder="Введите текст..." class="form-control rounded" asp-for="Text"></textarea></p>
+            <span asp-validation-for="Text"></span>
+        </div>
+        <div>
+            <button class="btn btn-primary btn mt-2" type="button" onclick="SendComment()"><i class="bi-send"></i> Отправить</button>
+        </div>
+    </form>
+}
+
+<script>
+    const comments = document.getElementById('comments');
+    const comTemplate = document.getElementById('commentTemplate');
+    const commText = document.getElementById('commentText');
+    const hiddenLogid = document.getElementById('hiddenLogId');
+
+    function SendComment() {
+        var data = $("#commentForm").serialize();
+        console.log(data);
+        $.ajax({
+            type: 'POST',
+            url: '/Repairlog/AddUserComment',
+            data: data,
+            success: function(result) {
+                document.getElementById('commentText').value = '';
+                console.log('SendComment done');
+            },
+            error: function() {
+                console.log('Failed ');
+            }
+        })
+    };
+
+    const commentsConnection = new signalR.HubConnectionBuilder()
+        .withUrl("/comments")
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+    commentsConnection.on('NewComment', (sender, messageText, messageDate, commentId) => {
+        console.log(`${sender}: ${messageText} ${messageDate}`);
+
+        var tempClone = comTemplate.content.cloneNode(true);
+        var commentator = tempClone.getElementById('commentator');
+        var text = tempClone.getElementById('text');
+        var date = tempClone.getElementById('datespan');
+        var commentIndex = tempClone.getElementById('index');
+        commentator.innerText = sender;
+        text.innerText = messageText;
+        date.innerText = messageDate;
+        commentIndex.innerText = commentId;
+
+        comments.appendChild(tempClone);
+    });
+
+    commentsConnection.onclose(() => {
+        console.log('CommentHub disconnected!');
+    })
+
+    commentsConnection.start().then(function() {
+        commentsConnection.invoke("EnterInLogGroup", Number($(':hidden#hiddenLogId').val()));
+        console.log('CommentHub connected!');
+    }).catch(function(err) {
+        console.log('CommentHub connection error!');
+    });
+
+</script>

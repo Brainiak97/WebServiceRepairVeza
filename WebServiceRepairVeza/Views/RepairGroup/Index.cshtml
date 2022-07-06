@@ -1,0 +1,67 @@
+﻿@model IEnumerable<WebService.Models.ViewModels.RepairGroup.RepairGroupViewModel>
+@using BLL.Models
+@{
+    ViewData["Title"] = "Список ремонтных групп";
+}
+
+<h2>Список ремонтных групп</h2>
+<p>
+    <a class="btn btn-dark" asp-action="Create"><i class="bi-journal-plus"></i> Добавить группу</a>
+</p>
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                Наименование
+            </th>
+            <th>
+                Описание
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var item in Model)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Name)
+                </td>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Description)
+                </td>
+                <td>
+                    @if (item.Users != null)
+                    {
+                        <table>
+                            @foreach (var user in item.Users)
+                            {
+                                @Html.DisplayFor(modelItem => user.Name)
+                                @Html.DisplayFor(modelItem => user.MiddleName)
+                                @Html.DisplayFor(modelItem => user.SurName)
+                            }
+                        </table>
+                    }
+                    @if (item.Logs != null)
+                    {
+                        <table>
+                            @foreach (var log in item.Logs)
+                            {
+                                @Html.DisplayFor(modelItem => log.RequestDate)
+                                @Html.DisplayFor(modelItem => log.Status)
+                            }
+                        </table>
+                    }
+                </td>
+                <td>
+                    <form asp-action="Delete" asp-route-id="@item.Id" method="post">
+                        <a class="btn btn-sm btn-secondary" asp-action="Edit" asp-route-id="@item.Id">Изменить</a>
+                        <button type="submit" class="btn btn-sm btn-secondary">
+                            Удалить
+                        </button>
+                    </form>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>

@@ -1,0 +1,46 @@
+﻿@model WebService.Models.ViewModels.RepairLog.RepairLogViewModel
+@inject BLL.Services.RepairGroupService RepairGroupService
+@{
+    ViewData["Title"] = "Edit";
+}
+<a href='@ViewData["returnUrl"]' class="btn btn-outline-dark">Вернуться</a>
+
+<h1>Изменение</h1>
+
+<h4>Заявка на ремонт</h4>
+<hr />
+<div class="row">
+    <form asp-action="Edit">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="AuthorId" />
+        <input type="hidden" asp-for="RequestDate" />
+        <input type="hidden" asp-for="Status" />
+        <input type="hidden" asp-for="Author" />
+        <input type="hidden" asp-for="Comments" />
+        <input type="hidden" asp-for="Executors" />
+        <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]" />
+
+        <div class="form-group">
+            <label asp-for="Malfunctions" class="control-label"></label>
+            <textarea asp-for="Malfunctions" class="form-control"></textarea>
+            <span asp-validation-for="Malfunctions" class="text-danger"></span>
+        </div>
+        <div class="form-group">
+            @foreach (var group in await RepairGroupService.GetItems())
+            {
+                <input type="checkbox" name="groups" value="@group.Name"
+                   @(Model.RepairGroups.Select(gr => gr.Name).Contains(group.Name) ? "checked=\"checked\"" : "") /> @group.Name <br />
+            }
+        </div>
+        <br />
+        <div class="form-group">
+            <input type="submit" value="Сохранить" class="btn btn-secondary" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

@@ -1,0 +1,176 @@
+﻿@using System.Security.Claims;
+@using Core.Models
+@using WebService.Controllers
+@model WebService.Models.ViewModels.RepairLog.RepairLogViewModel
+
+@if (Model.Status != Core.Models.RepairStatus.Completed)
+{
+    @if (User != null)
+    {
+        @if (Model.AuthorId.ToString() == User.FindFirst(ClaimTypes.NameIdentifier)?.Value || User.IsInRole("admin"))
+        {
+            @if (User.IsInRole("chief"))
+            {
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop-@Model.Id">
+                    Назначить
+                </button>
+
+                <!-- Modal -->
+                <div class="modal fade" id="staticBackdrop-@Model.Id" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel-@Model.Id" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-scrollable">
+                        <div class="modal-content">
+                            @await Component.InvokeAsync("Executors", new { logId = Model.Id, userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value) })
+                        </div>
+                    </div>
+                </div>
+            }
+
+            <form>
+                <button type="button" onclick="ToComplete(@Model.Id)" class="btn btn-sm btn-primary form-control">
+                    Завершить
+                </button>
+            </form>
+
+            if (Model.Status == Core.Models.RepairStatus.Check)
+            {
+                <form>
+                    <button type="button" onclick="ToRevision(@Model.Id)" class="btn btn-sm btn-primary form-control">
+                        Доработать
+                    </button>
+                </form>
+            }
+        }
+
+        if (Model.AuthorId.ToString() != User.FindFirst(ClaimTypes.NameIdentifier)?.Value && (User.IsInRole("employee") || User.IsInRole("admin")))
+        {
+            if (Model.Status == Core.Models.RepairStatus.Request)
+            {
+                <form>
+                    <button type="button" onclick="ToExecute(@Model.Id)" class="btn btn-sm btn-primary form-control">
+                        Принять
+                    </button>
+                </form>
+            }
+
+            if (Model.Status == Core.Models.RepairStatus.AtWork)
+            {
+                <form>
+                    <button type="button" onclick="ToChecking(@Model.Id)" class="btn btn-sm btn-primary form-control">
+                        На проверку
+                    </button>
+                </form>
+            }
+        }
+
+        @if (Model.Status != Core.Models.RepairStatus.Completed && (User.IsInRole("admin") || Model.AuthorId.ToString() == User.FindFirst(ClaimTypes.NameIdentifier)?.Value))
+        {
+            <a asp-controller="RepairLog" asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-sm btn-secondary">
+                Изменить
+            </a>
+        }
+
+        @if (User.IsInRole("admin"))
+        {
+            <form asp-action="Delete" asp-route-id="@Model.Id"
+      asp-route-pageName="@ViewData["pageName"]"
+      asp-route-pageNumber="@ViewData["pageNumber"]" method="post">
+                <button type="submit" class="btn btn-sm btn-secondary form-control">
+                    Удалить
+                </button>
+            </form>
+        }
+    }
+}
+else
+{
+    @if (User.IsInRole("admin") || User.IsInRole("chief") && Model.Status == Core.Models.RepairStatus.Completed)
+    {
+        <form>
+            <button type="button" onclick="ToArchive(@Model.Id)" class="btn btn-sm btn-danger form-control">
+                Архив
+            </button>
+        </form>
+    }
+}
+
+<script>
+    function IsCorrespondingGroups(id) {
+        $.ajax({
+            type: 'GET',
+            url: '/Repairlog/IsCorrespondingGroups',
+            data: { id: id },
+            success: function() {
+                console.log('ToComplIsCorrespondingGroupsete done');
+            },
+            error: function() {
+                console.log('Failed ');
+            }
+        })
+    };
+    function ToComplete(id) {
+        $.ajax({
+            type: 'POST',
+            url: '/Repairlog/ToComplete',
+            data: { id: id },
+            success: function() {
+                console.log('ToComplete done');
+            },
+            error: function() {
+                console.log('Failed ');
+            }
+        })
+    };
+    function ToChecking(id) {
+        $.ajax({
+            type: 'POST',
+            url: '/Repairlog/ToChecking',
+            data: { id: id },
+            success: function() {
+                console.log('ToChecking done');
+            },
+            error: function() {
+                console.log('Failed ');
+            }
+        })
+    };
+    function ToExecute(id) {
+        $.ajax({
+            type: 'POST',
+            url: '/Repairlog/ToExecute',
+            data: { id: id },
+            success: function() {
+                console.log('ToExecute done');
+            },
+            error: function() {
+                console.log('Failed ');
+            }
+        })
+    };
+    function ToRevision(id) {
+        $.ajax({
+            type: 'POST',
+            url: '/Repairlog/ToRevision',
+            data: { id: id },
+            success: function() {
+                console.log('ToRevision done');
+            },
+            error: function() {
+                console.log('Failed ');
+            }
+        })
+    };
+    function ToArchive(id) {
+        $.ajax({
+            type: 'POST',
+            url: '/Repairlog/ToArchive',
+            data: { id: id },
+            success: function() {
+                console.log('ToArchive done');
+            },
+            error: function() {
+                console.log('Failed ');
+            }
+        })
+    };
+</script>

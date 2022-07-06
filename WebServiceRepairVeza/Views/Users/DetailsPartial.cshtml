@@ -1,0 +1,124 @@
+﻿@using WebService.Models.ViewModels.User
+@model WebService.Models.ViewModels.User.UserViewModel
+@{
+    ViewData["Title"] = "ProfileInfo";
+}
+
+<div class="accordion" id="accordionPanelsStayOpenExample">
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="panelsStayOpen-headingOne-@Model.Id">
+            <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseOne-@Model.Id" aria-expanded="true" aria-controls="panelsStayOpen-collapseOne-@Model.Id">
+                Общая информация
+            </button>
+        </h2>
+        <div id="panelsStayOpen-collapseOne-@Model.Id" class="accordion-collapse collapse show" aria-labelledby="panelsStayOpen-headingOne-@Model.Id">
+            <div class="accordion-body">
+                <strong>@Model.SurName @Model.Name @Model.MiddleName</strong>
+                <br />
+                <u>@Html.DisplayFor(modelItem => Model.PhoneNumber)</u>
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="panelsStayOpen-headingTwo-@Model.Id">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseTwo-@Model.Id" aria-expanded="false" aria-controls="panelsStayOpen-collapseTwo-@Model.Id">
+                Ремонтные группы
+            </button>
+        </h2>
+        <div id="panelsStayOpen-collapseTwo-@Model.Id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingTwo-@Model.Id">
+            <div class="accordion-body">
+                @if (Model != null && Model.RepairGroups != null && Model.RepairGroups.Count() > 0)
+                {
+                    @foreach (var itemUser in Model.RepairGroups)
+                    {
+                        <span class="badge bg-info rounded-pill text-dark">
+                            @Html.DisplayFor(modelItem => itemUser.Name)
+                        </span>
+                    }
+                }
+                else
+                {
+                    <span>Нет принадлежности ни к одной из групп</span>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="panelsStayOpen-headingThree-@Model.Id">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseThree-@Model.Id" aria-expanded="false" aria-controls="panelsStayOpen-collapseThree-@Model.Id">
+                Является исполнителем
+            </button>
+        </h2>
+        <div id="panelsStayOpen-collapseThree-@Model.Id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingThree-@Model.Id">
+            <div class="accordion-body">
+                @if (Model != null && Model.LogExecutors != null && Model.LogExecutors.Count() > 0)
+                {
+                    @foreach (var logEx in Model.LogExecutors.OrderBy(l => l.Status))
+                    {
+                        @if (logEx.Status == Core.Models.RepairStatus.Archive)
+                        {
+                            <span class="badge bg-danger text-white">Заявка #@logEx.Id</span>
+                        }
+                        @if (logEx.Status == Core.Models.RepairStatus.AtWork)
+                        {
+                            <span class="badge bg-primary text-white">Заявка #@logEx.Id</span>
+                        }
+                        @if (logEx.Status == Core.Models.RepairStatus.Check)
+                        {
+                            <span class="badge bg-warning text-white">Заявка #@logEx.Id</span>
+                        }
+                        @if (logEx.Status == Core.Models.RepairStatus.Completed)
+                        {
+                            <span class="badge bg-success text-white">Заявка #@logEx.Id</span>
+                        }
+                    }
+                }
+                else
+                {
+                    <span>Не является исполнителем ни одной заявки</span>
+                }
+            </div>
+        </div>
+    </div>
+    <div class="accordion-item">
+        <h2 class="accordion-header" id="panelsStayOpen-headingFour-@Model.Id">
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapseFour-@Model.Id" aria-expanded="false" aria-controls="panelsStayOpen-collapseFour-@Model.Id">
+                Является автором
+            </button>
+        </h2>
+        <div id="panelsStayOpen-collapseFour-@Model.Id" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-headingFour-@Model.Id">
+            <div class="accordion-body">
+                @if (Model != null && Model.LogAuthors != null && Model.LogAuthors.Count() > 0)
+                {
+                    @foreach (var logAuth in Model.LogAuthors.OrderBy(l => l.Status))
+                    {
+                        @if (logAuth.Status == Core.Models.RepairStatus.Archive)
+                        {
+                            <span class="badge bg-danger text-white">Заявка #@logAuth.Id</span>
+                        }
+                        @if (logAuth.Status == Core.Models.RepairStatus.Request)
+                        {
+                            <span class="badge bg-secondary text-white">Заявка #@logAuth.Id</span>
+                        }
+                        @if (logAuth.Status == Core.Models.RepairStatus.AtWork)
+                        {
+                            <span class="badge bg-primary text-white">Заявка #@logAuth.Id</span>
+                        }
+                        @if (logAuth.Status == Core.Models.RepairStatus.Check)
+                        {
+                            <span class="badge bg-warning text-white">Заявка #@logAuth.Id</span>
+                        }
+                        @if (logAuth.Status == Core.Models.RepairStatus.Completed)
+                        {
+                            <span class="badge bg-success text-white">Заявка #@logAuth.Id</span>
+                        }
+                    }
+                }
+                else
+                {
+                    <span>Нет ни одной созданной заявки</span>
+                }
+            </div>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,59 @@
+﻿@using WebService.Models.ViewModels.Account
+@model RegisterViewModel
+
+<form class="registrForm" method="post" asp-controller="Account" asp-action="Register">
+    <legend>Впервые здесь?</legend>
+    <div asp-validation-summary="All" class="text-danger"></div>
+    <div>
+        <label asp-for="UserName">@Html.DisplayNameFor(modelItem => Model.UserName)</label>
+        <input class="form-control rounded  " asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <label asp-for="Surname">@Html.DisplayNameFor(modelItem => Model.Surname)</label><br />
+        <input class="form-control rounded " asp-for="Surname" />
+        <span asp-validation-for="Surname"></span>
+    </div>
+    <div>
+        <label asp-for="Name">@Html.DisplayNameFor(modelItem => Model.Name)</label><br />
+        <input class="form-control rounded " asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div>
+        <label asp-for="MiddleName">@Html.DisplayNameFor(modelItem => Model.MiddleName)</label><br />
+        <input class="form-control rounded " asp-for="MiddleName" />
+        <span asp-validation-for="MiddleName"></span>
+    </div>
+    <div>
+        <label asp-for="PhoneNumber">@Html.DisplayNameFor(modelItem => Model.PhoneNumber)</label><br />
+        <input id="phone" class="form-control rounded phone" asp-for="PhoneNumber" />
+        <span asp-validation-for="PhoneNumber"></span>
+    </div>
+    <div>
+        <label asp-for="Password">@Html.DisplayNameFor(modelItem => Model.Password)</label><br />
+        <input class="form-control rounded " asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <label asp-for="PasswordConfirm">@Html.DisplayNameFor(modelItem => Model.PasswordConfirm)</label><br />
+        <input class="form-control rounded " asp-for="PasswordConfirm" />
+        <span asp-validation-for="PasswordConfirm"></span>
+    </div>
+    <div>
+        <input class="btn btn-primary btn mt-2" type="submit" value="Регистрация" />
+    </div>
+</form>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.js" type="text/javascript"></script>
+
+<script>
+    jQuery (function ($) {
+      $(function() {
+        function maskPhone() {
+          $("#phone").mask("+375(99) 999-99-99");
+        }
+        maskPhone();
+      });
+    });
+</script>

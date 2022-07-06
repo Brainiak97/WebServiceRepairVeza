@@ -1,0 +1,119 @@
+﻿<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>
+                <button onclick="OnClickReadAllButton()" class="btn btn-sm btn-primary">
+                    Пометить все как прочитанное
+                </button>
+            </th>
+        </tr>
+    </thead>
+    <tbody id="notifs"></tbody>
+</table>
+
+<template id="messageTemplate">
+    <tr id="trLog">
+        <td>
+            <input type="hidden" id="index" />
+
+            <div class="row">
+                <div class="col-md-10 col-sm-10 col-10">
+                    <h6 class="mb-0" id="commentator">Morgan Freeman</h6>
+                </div>
+                <div class="col-md-2 col-sm-2 col-2">
+                    <button type="button" class="btn-close small text-reset" aria-label="Close"></button>
+                </div>
+            </div>
+            <span id="text" class="text-break">thisistext</span><br />
+            <span id="datespan" class="text-muted">Jan 29, 2020</span>
+        </td>
+    </tr>
+</template>
+
+<script>
+    const notifs = document.getElementById('notifs');
+    const template = document.getElementById('messageTemplate');
+
+    const notifConnection = new signalR.HubConnectionBuilder()
+        .withUrl("/notifications")
+        .configureLogging(signalR.LogLevel.Information)
+        .build();
+
+    function OnClickReadAllButton() {
+        $.post('/Home/ReadAllNotifications');
+    };
+
+    notifs.addEventListener('click', function(evt) {
+        if (evt.target.closest('.btn-close')) {
+            var targetIndex = $(evt.target.closest('td')).find('input').text();
+            console.log(targetIndex);
+            $.ajax({
+                type: 'POST',
+                url: '/Home/ReadNotification',
+                data: {
+                    'commentId': targetIndex
+                },
+                success: function(msg) {
+                    console.log('ReadNotification done');
+                }
+            });
+
+            evt.target.closest('tr').remove()
+        }
+        else {
+            window.location = evt.target.closest('[data-href]').dataset.href;
+
+            var targetIndex = $(evt.target.closest('td')).find('input').text();
+            console.log(targetIndex);
+            $.ajax({
+                type: 'POST',
+                url: '/Home/ReadNotification',
+                data: {
+                    'commentId': targetIndex
+                },
+                success: function(msg) {
+                    console.log('ReadNotification done');
+                }
+            });
+
+            evt.target.closest('tr').remove()
+        }
+    })
+
+    notifConnection.on('NewMessage', (sender, messageText, messageDate, commentId, logId) => {
+        console.log(`${sender}: ${messageText} ${messageDate}`);
+
+        var tempClone = template.content.cloneNode(true);
+        var commentator = tempClone.getElementById('commentator');
+        var text = tempClone.getElementById('text');
+        var date = tempClone.getElementById('datespan');
+        var commentIndex = tempClone.getElementById('index');
+        var tr = tempClone.getElementById('trLog');
+        commentator.innerText = sender;
+        text.innerText = messageText;
+        date.innerText = messageDate;
+        commentIndex.innerText = commentId;
+        tr.setAttribute('data-href', '/RepairLog/Details/' + logId);
+
+        notifs.appendChild(tempClone);
+        if (Notification.permission === "granted") {
+            new Notification(`${sender}: ${messageText} ${messageDate}`);
+        }
+    });
+
+    notifConnection.on('NotifCount', (count) => {
+        console.log(`NotifCount ${count}`);
+
+        messCount.innerText = count;
+    });
+
+    notifConnection.on('ClearList', () => {
+        notifs.innerHTML = '';
+        messCount.innerText = 0;
+        console.log(`NotifList cleared`);
+    });
+
+    notifConnection.start()
+        .then(() => console.log('NotificationHub connected!'))
+        .catch(console.error);
+</script>

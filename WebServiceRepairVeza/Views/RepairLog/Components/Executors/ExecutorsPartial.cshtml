@@ -1,0 +1,42 @@
+﻿@model WebService.Models.ViewModels.RepairLog.ChangeRepairLogExecutorsViewModel
+
+<form id="executorsForm-@Model.LogId">
+    <div class="modal-header">
+        <h5 class="modal-title" id="staticBackdropLabel-@Model.LogId">Заявка #@Model.LogId. Исполнители</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <input type="hidden" name="logId" value="@Model.LogId" />
+        <div class="form-group">
+            @foreach (var user in Model.AllExecutors)
+            {
+                <input type="checkbox" name="executors" value="@user.Id"
+                   @(Model.LogExecutors.Exists(logUser => logUser.Id == user.Id) ? "checked=\"checked\"" : "") />
+                <a>@user.SurName @user.Name @user.MiddleName</a>
+
+                <br />
+            }
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Закрыть</button>
+        <button type="button" class="btn btn-primary" onclick="SendExecutors()" data-bs-dismiss="modal">Сохранить</button>
+    </div>
+</form>
+
+<script>
+    function SendExecutors() {
+            var formData = $("#executorsForm-@Model.LogId").serialize();
+            $.ajax({
+            type: 'POST',
+            url: '/RepairLog/Appoint',
+            data: formData,
+            success: function (result) {
+                console.log('SendExecutors done');
+                },
+            error: function () {
+                console.log('SendExecutors failed');
+                }
+            });
+        };
+</script>

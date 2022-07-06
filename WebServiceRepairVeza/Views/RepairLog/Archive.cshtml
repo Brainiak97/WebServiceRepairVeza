@@ -1,0 +1,62 @@
+﻿@model IEnumerable<WebService.Models.ViewModels.RepairLog.RepairLogViewModel>
+@addTagHelper *, WebService
+@using BLL.Models
+@{
+    ViewBag.Title = "Архив заявок";
+}
+<style type="text/css" media="all and (min-width: 1400px)">
+    .block {
+        text-decoration: none;
+        color: black
+    }
+
+        .block:hover {
+            text-decoration: none;
+            color: black
+        }
+
+    .card {
+        border-radius: 4px;
+        background: #fff;
+        box-shadow: 0 6px 10px rgba(0,0,0,.08), 0 0 6px rgba(0,0,0,.05);
+        transition: .3s transform cubic-bezier(.155,1.105,.295,1.12),.3s box-shadow,.3s -webkit-transform cubic-bezier(.155,1.105,.295,1.12);
+        cursor: pointer;
+    }
+
+        .card:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 20px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+        }
+
+    .card-text {
+        display: -webkit-box;
+        -webkit-line-clamp: 3;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+    }
+
+    .content {
+        display: flex;
+    }
+</style>
+
+
+@if (Model != null && Model.Any())
+{
+    <h2>Архив заявок</h2>
+
+    <div class="container">
+        @foreach (var item in Model)
+        {
+            <a class="block" id="log-@item.Id" asp-controller="RepairLog" asp-action="Details" asp-route-id="@item.Id">
+                @{
+                    await Html.RenderPartialAsync("IndexPartial", item);
+                }
+            </a>
+        }
+    </div>
+}
+else
+{
+    <h1>@ViewData["Title"] пуст...</h1>
+}

@@ -1,0 +1,17 @@
+﻿@using Microsoft.AspNetCore.Identity
+@model WebService.Models.ViewModels.RepairGroup.ChangeRepairGroupViewModel
+
+<h2>Изменение ролей для пользователя @Model.UserName</h2>
+
+<form asp-action="ChangeRepairGroup" method="post">
+    <input type="hidden" name="userId" value="@Model.UserId" />
+    <div class="form-group">
+        @foreach (var group in Model.AllGroups)
+        {
+            <input type="checkbox" name="groups" value="@group.Name"
+               @(Model.UserGroups.Select(_=>_.Id).Contains(group.Id) ? "checked=\"checked\"" : "") /> @group.Name <br />
+        }
+    </div>
+    <br />
+    <button type="submit" class="btn btn-secondary">Сохранить</button>
+</form>

@@ -1,0 +1,45 @@
+﻿@using WebService.Models.ViewModels.Account
+@model RegisterViewModel
+
+<h2>Регистрация нового пользователя</h2>
+<form method="post" asp-controller="Account" asp-action="Register">
+    <div asp-validation-summary="ModelOnly"></div>
+    <div>
+        <label asp-for="UserName">@Html.DisplayNameFor(modelItem => Model.UserName)</label><br />
+        <input asp-for="UserName" />
+        <span asp-validation-for="UserName"></span>
+    </div>
+    <div>
+        <label asp-for="Surname">@Html.DisplayNameFor(modelItem => Model.Surname)</label><br />
+        <input asp-for="Surname" />
+        <span asp-validation-for="Surname"></span>
+    </div>
+    <div>
+        <label asp-for="Name">@Html.DisplayNameFor(modelItem => Model.Name)</label><br />
+        <input asp-for="Name" />
+        <span asp-validation-for="Name"></span>
+    </div>
+    <div>
+        <label asp-for="MiddleName">@Html.DisplayNameFor(modelItem => Model.MiddleName)</label><br />
+        <input asp-for="MiddleName" />
+        <span asp-validation-for="MiddleName"></span>
+    </div>
+    <div>
+        <label asp-for="PhoneNumber">@Html.DisplayNameFor(modelItem => Model.PhoneNumber)</label><br />
+        <input asp-for="PhoneNumber" class="phone" />
+        <span asp-validation-for="PhoneNumber"></span>
+    </div>
+    <div>
+        <label asp-for="Password">@Html.DisplayNameFor(modelItem => Model.Password)</label><br />
+        <input asp-for="Password" />
+        <span asp-validation-for="Password"></span>
+    </div>
+    <div>
+        <label asp-for="PasswordConfirm">@Html.DisplayNameFor(modelItem => Model.PasswordConfirm)</label><br />
+        <input asp-for="PasswordConfirm" />
+        <span asp-validation-for="PasswordConfirm"></span>
+    </div>
+    <div>
+        <input type="submit" value="Регистрация" />
+    </div>
+</form>

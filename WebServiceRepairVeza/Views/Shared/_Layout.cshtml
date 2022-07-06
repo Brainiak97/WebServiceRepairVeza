@@ -1,0 +1,172 @@
+﻿@using Microsoft.AspNetCore.Identity
+@inject SignInManager<Core.Models.User> SignInManager
+@inject UserManager<Core.Models.User> UserManager
+<!DOCTYPE html>
+<html lang="ru" heught="90vh">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="Page-Exit" content="progid:DXImageTransform.Microsoft.Fade(duration=.5)">
+
+    <title>@ViewData["Title"] - Управление службами Веза-Г</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/WebService.styles.css" asp-append-version="true" />
+    <script src="https://unpkg.com/@@aspnet/signalr@@1.0.0-rc1-final/dist/browser/signalr.js"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
+    <style type="text/css" media="all">
+
+        /*.navbar .dropdown-menu-end { для дроплистов внутри навбара
+                                                                                                                                                                                                            right: 0;
+                                                                                                                                                                                                            left: auto;
+                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                        .navbar .nav-item .dropdown-menu {
+                                                                                                                                                                                                            display: block;
+                                                                                                                                                                                                            opacity: 0;
+                                                                                                                                                                                                            visibility: hidden;
+                                                                                                                                                                                                            transition: .3s;
+                                                                                                                                                                                                            margin-top: 0;
+                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                        .navbar .nav-item:hover .nav-link {
+                                                                                                                                                                                                            color: #fff;
+                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                        .navbar .dropdown-menu.fade-down {
+                                                                                                                                                                                                            top: 80%;
+                                                                                                                                                                                                            transform: rotateX(-75deg);
+                                                                                                                                                                                                            transform-origin: 0% 0%;
+                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                        .navbar .dropdown-menu.fade-up {
+                                                                                                                                                                                                            top: 180%;
+                                                                                                                                                                                                        }
+
+                                                                                                                                                                                                        .navbar .nav-item:hover .dropdown-menu {
+                                                                                                                                                                                                            transition: .3s;
+                                                                                                                                                                                                            opacity: 1;
+                                                                                                                                                                                                            visibility: visible;
+                                                                                                                                                                                                            top: 100%;
+                                                                                                                                                                                                            transform: rotateX(0deg);
+                                                                                                                                                                                                        }*/
+    </style>
+
+</head>
+<body>
+    <nav class="navbar sticky-top navbar-light bg-light navbar-expand-xl navbar-toggleable-xl border-bottom box-shadow">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-area="" asp-controller="Home" asp-action="Index">Управление службами Веза-Г</a>
+            <div class="navbar-right">
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+
+            <div class="collapse navbar-collapse" id="navbarNavDropdown">
+                <ul class="navbar-nav flex-grow-1 justify-content-start">
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Users" asp-action="Index">
+                                <i class="bi-people"></i> Пользователи
+                            </a>
+                        </li>
+                        @if (User.IsInRole("admin"))
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="Roles" asp-action="Index">
+                                    <i class="bi-person-lines-fill"></i> Роли
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-area="" asp-controller="RepairGroup" asp-action="Index">
+                                    <i class="bi-wrench-adjustable-circle"></i> Ремонтные группы
+                                </a>
+                            </li>
+                        }
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="RepairLog" asp-action="Index"><i class="bi-journal-text"></i> Заявки</a>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="RepairLog" asp-action="Archive"><i class="bi-archive"></i> Архив</a>
+                        </li>
+                    }
+                </ul>
+
+                <ul class="navbar-nav justify-content-end">
+                    @if (User.Identity != null && User.Identity.IsAuthenticated)
+                    {
+                        <li class="nav-item">
+                            <button class="btn btn-primary position-relative" asp-action="" type="button" data-bs-toggle="offcanvas" data-bs-target="#offcanvasScrolling" aria-controls="offcanvasScrolling">
+                                <i class="bi-bell"></i> Уведомления
+                                <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" id="messCount">
+                                    <span class="visually-hidden">Непрочитанные уведомления</span>
+                                </span>
+                            </button>
+                        </li>
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Users" asp-action="AccountProfile"><i class="bi-file-person"></i> @User.Identity.Name</a>
+                        </li>
+                        <li class="nav-item">
+                            <form id="submitForm" method="post" asp-controller="Account" asp-action="Logout">
+                                <a class="nav-link text-dark" href=# onclick="document.getElementById('submitForm').submit()">
+                                    Выход
+                                </a>
+                            </form>
+                        </li>
+                    }
+                    else
+                    {
+                        <li class="nav-item">
+                            <a class="nav-link text-dark" asp-controller="Account" asp-action="Login">Вход</a>
+                        </li>
+                    }
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div class="offcanvas offcanvas-end" data-bs-scroll="true" data-bs-backdrop="false" tabindex="-1" id="offcanvasScrolling" aria-labelledby="offcanvasScrollingLabel">
+        <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="offcanvasScrollingLabel">Непрочитанные уведомления</h5>
+            <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+        </div>
+        <div class="offcanvas-body">
+            @{
+                await Html.RenderPartialAsync("NotificationPartial");
+            }
+        </div>
+    </div>
+
+    <div class="container-fluid">
+        <main role="main">
+            @RenderBody()
+        </main>
+    </div>
+
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/lib/jquery/dist/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="~/lib/jqueryui-touch-punch/jquery.ui.touch-punch.min.js"></script>
+    <script src="~/lib/OwlCarousel2/owl.carousel.js"></script>
+    <script src="~/js/site.js" asp-append-version="true"></script>
+
+    @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            if (Notification.permission == "default") {
+                setTimeout(() =>
+                Notification.requestPermission().then(permission => {
+                    if (permission === "granted") {
+                        console.log("The user accepted");
+                        new Notification("Отлично, вы подписались на уведомления!");
+                    }
+                })
+                , 5000);
+            }
+        });
+    </script>
+</body>
+</html>

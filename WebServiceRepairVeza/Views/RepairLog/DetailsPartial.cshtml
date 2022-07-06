@@ -1,0 +1,120 @@
+﻿@model WebService.Models.ViewModels.RepairLog.RepairLogViewModel
+@using BLL.Models
+
+<div class="row">
+    <div class="col-md-6 col-sm-6 col-6">
+        <button type="button" class="btn btn-link link-dark" onclick="LoadUser(@Model.AuthorId)" data-bs-toggle="modal" data-bs-target="#modal-template">
+            Автор: @Model.Author.SurName @Model.Author.Name @Model.Author.MiddleName
+        </button>
+    </div>
+    <div class="col-md-6 col-sm-6 col-6 text-end">
+        <u>@Html.DisplayFor(modelItem => Model.RequestDate)</u>
+    </div>
+</div>
+
+<div class="row">
+    <h1>
+        @if (Model.Status == Core.Models.RepairStatus.AtWork)
+        {
+            <span class="badge bg-primary rounded-pill">
+                Заявка #@Model.Id.@Html.DisplayFor(modelItem => Model.Status)
+            </span>
+        }
+        @if (Model.Status == Core.Models.RepairStatus.Check)
+        {
+            <span class="badge bg-warning rounded-pill">
+                Заявка #@Model.Id.@Html.DisplayFor(modelItem => Model.Status)
+            </span>
+        }
+        @if (Model.Status == Core.Models.RepairStatus.Completed)
+        {
+            <span class="badge bg-success rounded-pill">
+                Заявка #@Model.Id.@Html.DisplayFor(modelItem => Model.Status)
+            </span>
+        }
+        @if (Model.Status == Core.Models.RepairStatus.Request)
+        {
+            <span class="badge bg-secondary rounded-pill">
+                Заявка #@Model.Id.@Html.DisplayFor(modelItem => Model.Status)
+            </span>
+        }
+        @if (Model.Status == Core.Models.RepairStatus.Archive)
+        {
+            <span class="badge bg-danger rounded-pill">
+                Заявка #@Model.Id.@Html.DisplayFor(modelItem => Model.Status)
+            </span>
+        }
+    </h1>
+</div>
+<hr />
+<input type="hidden" value="Model.Id" />
+<div class="container">
+    <div class="row">
+        <div class="col-md-10">
+            <div class="row justify-content-start">
+                <div class="col-md-10 col-sm-10">
+                    @if (Model.RepairGroups != null)
+                        @foreach (var itemUser in Model.RepairGroups)
+                        {
+                            <span class="badge bg-info rounded-pill text-dark">
+                                @Html.DisplayFor(modelItem => itemUser.Name)
+                            </span>
+                        }
+                </div>
+            </div>
+            <div class="row justify-content-center">
+                <div class="col-md-10 col-sm-10  text-break">
+                    @Html.DisplayFor(modelItem => Model.Malfunctions)
+                </div>
+            </div>
+        </div>
+        <div class="col-md-2 d-flex flex-column gap-2">
+            @{
+                await Html.RenderPartialAsync("ControlsPartial", Model, ViewData);
+            }
+        </div>
+    </div>
+    @if (Model.Executors != null && Model.Executors.Any())
+    {
+        <div class="row">
+            <div class="overflow-auto">
+                <h5>Исполнители</h5>
+                @foreach (var executor in Model.Executors)
+                {
+                    <button type="button" class="btn btn-sm btn-outline-dark rounded-pill" onclick="LoadUser(@executor.Id)" data-bs-toggle="modal" data-bs-target="#modal-template">
+                        @executor.SurName @executor.Name @executor.MiddleName
+                    </button>
+                }
+            </div>
+        </div>
+    }
+</div>
+
+<div class="modal fade" id="modal-template" z-index="1000" tabindex="-1" aria-labelledby="modalLabel-template" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalLabel-template">Информация о пользователе</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="modal-body-id" />
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    function LoadUser(id) {
+        $.ajax({
+            type: 'GET',
+            url: '/Users/GetUserById',
+            data: { id: id },
+            success: function(partialview) {
+                $("#modal-body-id").html(partialview);
+                console.log('GetUserById done');
+            },
+            error: function() {
+                console.log('Failed GetUserById');
+            }
+        })
+    }
+</script>
