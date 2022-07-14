@@ -137,6 +137,7 @@
 
     <nav id="context-menu" class="context-menu">
         <ul class="context-menu__items">
+
             @if (User.IsInRole("admin") || User.IsInRole("chief"))
             {
                 <li class="context-menu__item">

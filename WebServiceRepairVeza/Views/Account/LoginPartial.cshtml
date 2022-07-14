@@ -1,18 +1,37 @@
 ﻿@using WebService.Models.ViewModels.Account
 @model LoginViewModel
 
-<form class="loginForm" method="post" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model?.ReturnUrl">
+<style>
+    .form-floating-group input {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    #togglePassword {
+        cursor: pointer;
+    }
+</style>
+
+<form class="loginForm d-flex flex-column gap-2 needs-validation" novalidate method="post" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model?.ReturnUrl">
     <legend>Введите свои учетные данные</legend>
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div class="form-group">
-        <label asp-for="UserName" class="control-label">@Html.DisplayNameFor(modelItem => Model.UserName)</label>
-        <input asp-for="UserName" class="form-control" />
-        <span asp-validation-for="UserName" class="text-danger"></span>
+    <div class="form-floating">
+        <input asp-for="UserName" class="form-control" id="floatingInputUserName" required />
+        <label for="floatingInputValue" class="control-label">@Html.DisplayNameFor(modelItem => Model.UserName)</label>
+        <div class="invalid-feedback">
+            Введите логин
+        </div>
     </div>
-    <div class="form-group">
-        <label asp-for="Password" class="control-label">@Html.DisplayNameFor(modelItem => Model.Password)</label>
-        <input asp-for="Password" class="form-control" />
-        <span asp-validation-for="Password" class="text-danger"></span>
+    <div class="input-group">
+        <div class="form-floating form-floating-group flex-grow-1">
+            <input asp-for="Password" class="form-control" id="floatingInputPassword" required />
+            <label for="floatingInputPassword" class="control-label">@Html.DisplayNameFor(modelItem => Model.Password)</label>
+            <div class="invalid-feedback">
+                Введите пароль
+            </div>
+        </div>
+        <span class="input-group-text">
+            <i class="bi bi-eye-slash" id="togglePassword"></i>
+        </span>
     </div>
     <div class="form-group">
         <label asp-for="RememberMe" class="control-label"></label>
@@ -22,3 +41,17 @@
         <input class="btn btn-primary" type="submit" value="Войти" />
     </div>
 </form>
+
+<script>
+    const togglePassword = document.querySelector("#togglePassword");
+    const password = document.querySelector("#floatingInputPassword");
+
+    togglePassword.addEventListener("click", function() {
+        // toggle the type attribute
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        // toggle the icon
+        this.classList.toggle("bi-eye");
+    });
+</script>

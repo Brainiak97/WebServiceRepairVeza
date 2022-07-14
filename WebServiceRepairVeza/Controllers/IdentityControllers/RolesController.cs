@@ -131,6 +131,7 @@ namespace WebService.Controllers.IdentityControllers
                 await _userManager.RemoveFromRolesAsync(user, removedRoles);
 
                 await _userManager.UpdateAsync(user);
+
                 return RedirectToAction("Index", "Users");
             }
 

@@ -462,7 +462,6 @@ namespace WebService.Controllers
                 await _commentService.SendNewCommentToActiveUsers(id);
 
                 await _repairLogIndexHub.Clients.Group("RepairLogIndex").SendAsync("UpdateLog", model.RepairLogId);
-                await _repairLogDetailsHub.Clients.Group($"LogGroupDetails#{model.RepairLogId}").SendAsync("UpdateLog", model.RepairLogId);
 
                 _logger.LogInformation($"The {nameof(model)} commenting was successful.");
             }

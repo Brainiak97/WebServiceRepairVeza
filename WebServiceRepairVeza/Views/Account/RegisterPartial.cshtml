@@ -1,43 +1,77 @@
 ﻿@using WebService.Models.ViewModels.Account
 @model RegisterViewModel
 
-<form class="registrForm" method="post" asp-controller="Account" asp-action="Register">
+<style>
+    .form-floating-group input {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    #togglePassword1, #togglePassword2 {
+        cursor: pointer;
+    }
+</style>
+
+<form class="registrForm d-flex flex-column gap-2 needs-validation" novalidate method="post" asp-controller="Account" asp-action="Register">
     <legend>Впервые здесь?</legend>
-    <div asp-validation-summary="All" class="text-danger"></div>
-    <div>
-        <label asp-for="UserName">@Html.DisplayNameFor(modelItem => Model.UserName)</label>
-        <input class="form-control rounded  " asp-for="UserName" />
-        <span asp-validation-for="UserName"></span>
+    <div class="form-floating">
+        <input asp-for="UserName" class="form-control" id="floatingInputUserName1" required />
+        <label for="floatingInputValue1" class="control-label">@Html.DisplayNameFor(modelItem => Model.UserName)</label>
+        <div class="invalid-feedback">
+            Введите логин
+        </div>
     </div>
-    <div>
-        <label asp-for="Surname">@Html.DisplayNameFor(modelItem => Model.Surname)</label><br />
-        <input class="form-control rounded " asp-for="Surname" />
-        <span asp-validation-for="Surname"></span>
+    <div class="form-floating">
+        <input asp-for="Surname" class="form-control" id="floatingInputUserName2" required />
+        <label for="floatingInputValue2" class="control-label">@Html.DisplayNameFor(modelItem => Model.Surname)</label>
+        <div class="invalid-feedback">
+            Введите фамилию
+        </div>
     </div>
-    <div>
-        <label asp-for="Name">@Html.DisplayNameFor(modelItem => Model.Name)</label><br />
-        <input class="form-control rounded " asp-for="Name" />
-        <span asp-validation-for="Name"></span>
+    <div class="form-floating">
+        <input asp-for="Name" class="form-control" id="floatingInputUserName3" required />
+        <label for="floatingInputValue3" class="control-label">@Html.DisplayNameFor(modelItem => Model.Name)</label>
+        <div class="invalid-feedback">
+            Введите имя
+        </div>
     </div>
-    <div>
-        <label asp-for="MiddleName">@Html.DisplayNameFor(modelItem => Model.MiddleName)</label><br />
-        <input class="form-control rounded " asp-for="MiddleName" />
-        <span asp-validation-for="MiddleName"></span>
+    <div class="form-floating">
+        <input asp-for="MiddleName" class="form-control" id="floatingInputUserName4" required />
+        <label for="floatingInputValue4" class="control-label">@Html.DisplayNameFor(modelItem => Model.MiddleName)</label>
+        <div class="invalid-feedback">
+            Введите отчество
+        </div>
     </div>
-    <div>
-        <label asp-for="PhoneNumber">@Html.DisplayNameFor(modelItem => Model.PhoneNumber)</label><br />
-        <input id="phone" class="form-control rounded phone" asp-for="PhoneNumber" />
-        <span asp-validation-for="PhoneNumber"></span>
+    <div class="form-floating">
+        <input asp-for="PhoneNumber" id="phone" class="form-control" id="floatingInputUserName5" required />
+        <label for="floatingInputValue5" class="control-label">@Html.DisplayNameFor(modelItem => Model.PhoneNumber)</label>
+        <div class="invalid-feedback">
+            Введите номер телефона
+        </div>
     </div>
-    <div>
-        <label asp-for="Password">@Html.DisplayNameFor(modelItem => Model.Password)</label><br />
-        <input class="form-control rounded " asp-for="Password" />
-        <span asp-validation-for="Password"></span>
+    <div class="input-group">
+        <div class="form-floating form-floating-group flex-grow-1">
+            <input asp-for="Password" class="form-control" id="floatingInputPassword1" required />
+            <label for="floatingInputPassword1" class="control-label">@Html.DisplayNameFor(modelItem => Model.Password)</label>
+            <div class="invalid-feedback">
+                Введите пароль
+            </div>
+        </div>
+        <span class="input-group-text">
+            <i class="bi bi-eye-slash" id="togglePassword1"></i>
+        </span>
     </div>
-    <div>
-        <label asp-for="PasswordConfirm">@Html.DisplayNameFor(modelItem => Model.PasswordConfirm)</label><br />
-        <input class="form-control rounded " asp-for="PasswordConfirm" />
-        <span asp-validation-for="PasswordConfirm"></span>
+    <div class="input-group">
+        <div class="form-floating form-floating-group flex-grow-1">
+            <input asp-for="PasswordConfirm" class="form-control" id="floatingInputPassword2" required />
+            <label for="floatingInputPassword2" class="control-label">@Html.DisplayNameFor(modelItem => Model.PasswordConfirm)</label>
+            <div class="invalid-feedback">
+                Подтвердите пароль
+            </div>
+        </div>
+        <span class="input-group-text">
+            <i class="bi bi-eye-slash" id="togglePassword2"></i>
+        </span>
     </div>
     <div>
         <input class="btn btn-primary btn mt-2" type="submit" value="Регистрация" />
@@ -48,12 +82,34 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.js" type="text/javascript"></script>
 
 <script>
-    jQuery (function ($) {
-      $(function() {
-        function maskPhone() {
-          $("#phone").mask("+375(99) 999-99-99");
-        }
-        maskPhone();
-      });
+    const togglePassword1 = document.querySelector("#togglePassword1");
+    const togglePassword2 = document.querySelector("#togglePassword2");
+    const password1 = document.querySelector("#floatingInputPassword1");
+    const password2 = document.querySelector("#floatingInputPassword2");
+
+    togglePassword1.addEventListener("click", function() {
+        // toggle the type attribute
+        const type = password1.getAttribute("type") === "password" ? "text" : "password";
+        password1.setAttribute("type", type);
+
+        // toggle the icon
+        this.classList.toggle("bi-eye");
+    });
+    togglePassword2.addEventListener("click", function() {
+        // toggle the type attribute
+        const type = password2.getAttribute("type") === "password" ? "text" : "password";
+        password2.setAttribute("type", type);
+
+        // toggle the icon
+        this.classList.toggle("bi-eye");
+    });
+
+    jQuery(function($) {
+        $(function() {
+            function maskPhone() {
+                $("#phone").mask("+375(99) 999-99-99");
+            }
+            maskPhone();
+        });
     });
 </script>

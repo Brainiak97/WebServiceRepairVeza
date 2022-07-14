@@ -28,16 +28,14 @@
 
 @if ((Core.Models.RepairStatus)ViewData["status"] != Core.Models.RepairStatus.Archive)
 {
-    <form id="commentForm">
-        <legend>Оставьте свой комментарий</legend>
-        <div asp-validation-summary="ModelOnly"></div>
+    <form id="commentForm" class="needs-validation">
         <input id="hiddenLogId" type="hidden" asp-for="RepairLogId" />
-        <div>
-            <p><textarea rows="5" id="commentText" type="text" placeholder="Введите текст..." class="form-control rounded" asp-for="Text"></textarea></p>
-            <span asp-validation-for="Text"></span>
+        <div class="form-floating">
+            <textarea asp-for="Text" class="form-control rounded" id="commentText" style="min-height: 100px" required></textarea>
+            <label for="commentText">Оставьте свой комментарий...</label>
         </div>
         <div>
-            <button class="btn btn-primary btn mt-2" type="button" onclick="SendComment()"><i class="bi-send"></i> Отправить</button>
+            <button class="btn btn-primary btn mt-2" type="submit" onclick="SendComment()"><i class="bi-send"></i> Отправить</button>
         </div>
     </form>
 }
@@ -49,20 +47,27 @@
     const hiddenLogid = document.getElementById('hiddenLogId');
 
     function SendComment() {
-        var data = $("#commentForm").serialize();
-        console.log(data);
-        $.ajax({
-            type: 'POST',
-            url: '/Repairlog/AddUserComment',
-            data: data,
-            success: function(result) {
-                document.getElementById('commentText').value = '';
-                console.log('SendComment done');
-            },
-            error: function() {
-                console.log('Failed ');
-            }
-        })
+        if ($("#commentText").val() == '') {
+            $("#commentText").attr('required', true);
+        }
+        else {
+            $("#commentText").attr('required', false);
+
+            var data = $("#commentForm").serialize();
+            console.log(data);
+            $.ajax({
+                type: 'POST',
+                url: '/Repairlog/AddUserComment',
+                data: data,
+                success: function(result) {
+                    document.getElementById('commentText').value = '';
+                    console.log('SendComment done');
+                },
+                error: function() {
+                    console.log('Failed ');
+                }
+            })
+        }
     };
 
     const commentsConnection = new signalR.HubConnectionBuilder()
@@ -97,4 +102,22 @@
         console.log('CommentHub connection error!');
     });
 
+    (function() {
+        'use strict';
+        window.addEventListener('load', function() {
+            // Fetch all the forms we want to apply custom Bootstrap validation styles to
+            var forms = document.getElementsByClassName('needs-validation');
+            // Loop over them and prevent submission
+            var validation = Array.prototype.filter.call(forms, function(form) {
+                form.addEventListener('submit', function(event) {
+                    event.preventDefault();
+
+                    if (form.checkValidity() === false) {
+                        event.stopPropagation();
+                    }
+                    form.classList.add('was-validated');
+                }, false);
+            });
+        }, false);
+    })();
 </script>

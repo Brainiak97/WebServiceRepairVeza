@@ -16,40 +16,40 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.8.1/font/bootstrap-icons.css">
     <style type="text/css" media="all">
 
-        /*.navbar .dropdown-menu-end { для дроплистов внутри навбара
-                                                                                                                                                                                                            right: 0;
-                                                                                                                                                                                                            left: auto;
-                                                                                                                                                                                                        }
+        /*.navbar .dropdown-menu-end {
+                    right: 0;
+                    left: auto;
+                }
 
-                                                                                                                                                                                                        .navbar .nav-item .dropdown-menu {
-                                                                                                                                                                                                            display: block;
-                                                                                                                                                                                                            opacity: 0;
-                                                                                                                                                                                                            visibility: hidden;
-                                                                                                                                                                                                            transition: .3s;
-                                                                                                                                                                                                            margin-top: 0;
-                                                                                                                                                                                                        }
+                .navbar .nav-item .dropdown-menu {
+                    display: block;
+                    opacity: 0;
+                    visibility: hidden;
+                    transition: .3s;
+                    margin-top: 0;
+                }
 
-                                                                                                                                                                                                        .navbar .nav-item:hover .nav-link {
-                                                                                                                                                                                                            color: #fff;
-                                                                                                                                                                                                        }
+                .navbar .nav-item:hover .nav-link {
+                    color: #fff;
+                }
 
-                                                                                                                                                                                                        .navbar .dropdown-menu.fade-down {
-                                                                                                                                                                                                            top: 80%;
-                                                                                                                                                                                                            transform: rotateX(-75deg);
-                                                                                                                                                                                                            transform-origin: 0% 0%;
-                                                                                                                                                                                                        }
+                .navbar .dropdown-menu.fade-down {
+                    top: 80%;
+                    transform: rotateX(-75deg);
+                    transform-origin: 0% 0%;
+                }
 
-                                                                                                                                                                                                        .navbar .dropdown-menu.fade-up {
-                                                                                                                                                                                                            top: 180%;
-                                                                                                                                                                                                        }
+                .navbar .dropdown-menu.fade-up {
+                    top: 180%;
+                }
 
-                                                                                                                                                                                                        .navbar .nav-item:hover .dropdown-menu {
-                                                                                                                                                                                                            transition: .3s;
-                                                                                                                                                                                                            opacity: 1;
-                                                                                                                                                                                                            visibility: visible;
-                                                                                                                                                                                                            top: 100%;
-                                                                                                                                                                                                            transform: rotateX(0deg);
-                                                                                                                                                                                                        }*/
+                .navbar .nav-item:hover .dropdown-menu {
+                    transition: .3s;
+                    opacity: 1;
+                    visibility: visible;
+                    top: 100%;
+                    transform: rotateX(0deg);
+                }*/
     </style>
 
 </head>
@@ -147,6 +147,7 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery/dist/jqueryui/jquery-ui.min.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jqueryui-touch-punch/jquery.ui.touch-punch.min.js"></script>
     <script src="~/lib/OwlCarousel2/owl.carousel.js"></script>
@@ -158,13 +159,13 @@
         document.addEventListener("DOMContentLoaded", () => {
             if (Notification.permission == "default") {
                 setTimeout(() =>
-                Notification.requestPermission().then(permission => {
-                    if (permission === "granted") {
-                        console.log("The user accepted");
-                        new Notification("Отлично, вы подписались на уведомления!");
-                    }
-                })
-                , 5000);
+                    Notification.requestPermission().then(permission => {
+                        if (permission === "granted") {
+                            console.log("The user accepted");
+                            new Notification("Отлично, вы подписались на уведомления!");
+                        }
+                    })
+                    , 5000);
             }
         });
     </script>

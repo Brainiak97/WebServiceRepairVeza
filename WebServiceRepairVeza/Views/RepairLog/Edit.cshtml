@@ -3,6 +3,8 @@
 @{
     ViewData["Title"] = "Edit";
 }
+<h2></h2>
+
 <a href='@ViewData["returnUrl"]' class="btn btn-outline-dark">Вернуться</a>
 
 <h1>Изменение</h1>
@@ -10,7 +12,7 @@
 <h4>Заявка на ремонт</h4>
 <hr />
 <div class="row">
-    <form asp-action="Edit">
+    <form class="d-flex flex-column gap-2 needs-validation" novalidate asp-action="Edit">
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="AuthorId" />
         <input type="hidden" asp-for="RequestDate" />
@@ -20,19 +22,39 @@
         <input type="hidden" asp-for="Executors" />
         <input type="hidden" name="returnUrl" value="@ViewData["returnUrl"]" />
 
-        <div class="form-group">
-            <label asp-for="Malfunctions" class="control-label"></label>
-            <textarea asp-for="Malfunctions" class="form-control"></textarea>
-            <span asp-validation-for="Malfunctions" class="text-danger"></span>
+        <div class="form-floating">
+            <textarea rows="3" asp-for="Malfunctions" class="form-control" placeholder="Введите неисправности" id="floatingTextarea" style="min-height: 100px" required></textarea>
+            <label for="floatingTextarea">@Html.DisplayNameFor(modelItem => Model.Malfunctions)</label>
+            <div class="invalid-feedback">
+                Введите неисправности
+            </div>
         </div>
-        <div class="form-group">
-            @foreach (var group in await RepairGroupService.GetItems())
-            {
-                <input type="checkbox" name="groups" value="@group.Name"
-                   @(Model.RepairGroups.Select(gr => gr.Name).Contains(group.Name) ? "checked=\"checked\"" : "") /> @group.Name <br />
+        <div class="form-group" id="controls">
+            @{
+                var allGroups = await RepairGroupService.GetItems();
+                @if (allGroups.Count() > 1)
+                {
+                    <div style="margin-left: 25px">
+                        <input type="checkbox" id="checkboxAll">
+                        <lable for="checkboxAll" class="form-check-label">Отметить / снять все</lable>
+                    </div>
+                }
+                @foreach (var group in allGroups)
+                {
+                    <div class="form-check">
+                        <input onchange="checkRequired()" class="checkBoxClass form-check-input" id="checkbox-@group.Id" required type="checkbox" name="groups" value="@group.Name"
+                           @(Model.RepairGroups.Select(gr => gr.Name).Contains(group.Name) ? "checked=\"checked\"" : "") />
+                        <lable for="checkbox-@group.Id" class="form-check-label">@group.Name</lable>
+                        @if (allGroups.LastOrDefault() == group)
+                        {
+                            <div class="invalid-feedback">
+                                Выберите хотябы одну группу
+                            </div>
+                        }
+                    </div>
+                }
             }
         </div>
-        <br />
         <div class="form-group">
             <input type="submit" value="Сохранить" class="btn btn-secondary" />
         </div>
@@ -40,6 +62,64 @@
 </div>
 
 @section Scripts {
+    <script type="text/javascript">
+        (function($) { })(jQuery);
+
+        function checkRequired() {
+            if ($("[name='groups']:checked").length < 1) {
+                $("[name='groups']").attr('required', true);
+            }
+            else {
+                $("[name='groups']").attr('required', false);
+            }
+        }
+
+        $('#checkboxAll').click(function() {
+            if ($(this).is(':checked')) {
+                $('#controls input:checkbox').prop('checked', true);
+            } else if (!$(this).is(':checked')) {
+                $('#controls input:checkbox').prop('checked', false);
+            }
+        });
+
+        $('.checkBoxClass').on('change', function() {
+            if ($('.checkBoxClass:checked').length != $('.checkBoxClass').length)
+                $('#checkboxAll').prop('checked', false);
+            else $('#checkboxAll').prop('checked', true);
+        });
+    </script>
+    <script>
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        var failed = false;
+
+                        if ($("[name='groups']:checked").length < 1) {
+                            $("[name='groups']").attr('required', true);
+                            failed = true;
+                        }
+                        else {
+                            $("[name='groups']").attr('required', false);
+                        }
+
+                        if (form.checkValidity() === false) {
+                            failed = true;
+                        }
+
+                        if (failed == true) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+    </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");
     }
