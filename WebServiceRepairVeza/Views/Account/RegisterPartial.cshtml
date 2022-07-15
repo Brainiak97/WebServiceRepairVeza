@@ -7,7 +7,7 @@
         border-top-right-radius: 0;
     }
 
-    #togglePassword1, #togglePassword2 {
+    #togglePasswordRegister, #togglePasswordRegisterConf {
         cursor: pointer;
     }
 </style>
@@ -15,62 +15,62 @@
 <form class="registrForm d-flex flex-column gap-2 needs-validation" novalidate method="post" asp-controller="Account" asp-action="Register">
     <legend>Впервые здесь?</legend>
     <div class="form-floating">
-        <input asp-for="UserName" class="form-control" id="floatingInputUserName1" required />
-        <label for="floatingInputValue1" class="control-label">@Html.DisplayNameFor(modelItem => Model.UserName)</label>
+        <input asp-for="UserName" class="form-control" placeholder="Введите логин" id="floatingInputUserNameRegister" required />
+        <label for="floatingInputUserNameRegister" class="control-label">@Html.DisplayNameFor(modelItem => Model.UserName)</label>
         <div class="invalid-feedback">
             Введите логин
         </div>
     </div>
     <div class="form-floating">
-        <input asp-for="Surname" class="form-control" id="floatingInputUserName2" required />
-        <label for="floatingInputValue2" class="control-label">@Html.DisplayNameFor(modelItem => Model.Surname)</label>
+        <input asp-for="SurName" class="form-control" placeholder="Введите фамилию" id="floatingInputSurName" required />
+        <label for="floatingInputSurName" class="control-label">@Html.DisplayNameFor(modelItem => Model.SurName)</label>
         <div class="invalid-feedback">
             Введите фамилию
         </div>
     </div>
     <div class="form-floating">
-        <input asp-for="Name" class="form-control" id="floatingInputUserName3" required />
-        <label for="floatingInputValue3" class="control-label">@Html.DisplayNameFor(modelItem => Model.Name)</label>
+        <input asp-for="Name" class="form-control" placeholder="Введите имя" id="floatingInputName" required />
+        <label for="floatingInputName" class="control-label">@Html.DisplayNameFor(modelItem => Model.Name)</label>
         <div class="invalid-feedback">
             Введите имя
         </div>
     </div>
     <div class="form-floating">
-        <input asp-for="MiddleName" class="form-control" id="floatingInputUserName4" required />
-        <label for="floatingInputValue4" class="control-label">@Html.DisplayNameFor(modelItem => Model.MiddleName)</label>
+        <input asp-for="MiddleName" class="form-control" placeholder="Введите отчество" id="floatingInputMiddleName" required />
+        <label for="floatingInputMiddleName" class="control-label">@Html.DisplayNameFor(modelItem => Model.MiddleName)</label>
         <div class="invalid-feedback">
             Введите отчество
         </div>
     </div>
     <div class="form-floating">
-        <input asp-for="PhoneNumber" id="phone" class="form-control" id="floatingInputUserName5" required />
-        <label for="floatingInputValue5" class="control-label">@Html.DisplayNameFor(modelItem => Model.PhoneNumber)</label>
+        <input asp-for="PhoneNumber" id="phone" class="form-control" placeholder="Введите номер телефона" id="floatingInputPhoneNumber" required />
+        <label for="floatingInputPhoneNumber" class="control-label">@Html.DisplayNameFor(modelItem => Model.PhoneNumber)</label>
         <div class="invalid-feedback">
             Введите номер телефона
         </div>
     </div>
     <div class="input-group">
         <div class="form-floating form-floating-group flex-grow-1">
-            <input asp-for="Password" class="form-control" id="floatingInputPassword1" required />
-            <label for="floatingInputPassword1" class="control-label">@Html.DisplayNameFor(modelItem => Model.Password)</label>
+            <input asp-for="Password" class="form-control" placeholder="Введите пароль" id="floatingInputPasswordRegister" required />
+            <label for="floatingInputPasswordRegister" class="control-label">@Html.DisplayNameFor(modelItem => Model.Password)</label>
             <div class="invalid-feedback">
                 Введите пароль
             </div>
         </div>
         <span class="input-group-text">
-            <i class="bi bi-eye-slash" id="togglePassword1"></i>
+            <i class="bi bi-eye-slash" id="togglePasswordRegister"></i>
         </span>
     </div>
     <div class="input-group">
         <div class="form-floating form-floating-group flex-grow-1">
-            <input asp-for="PasswordConfirm" class="form-control" id="floatingInputPassword2" required />
-            <label for="floatingInputPassword2" class="control-label">@Html.DisplayNameFor(modelItem => Model.PasswordConfirm)</label>
+            <input asp-for="PasswordConfirm" class="form-control" placeholder="Подтвердите пароль" id="floatingInputPasswordRegisterConf" required />
+            <label for="floatingInputPasswordRegisterConf" class="control-label">@Html.DisplayNameFor(modelItem => Model.PasswordConfirm)</label>
             <div class="invalid-feedback">
                 Подтвердите пароль
             </div>
         </div>
         <span class="input-group-text">
-            <i class="bi bi-eye-slash" id="togglePassword2"></i>
+            <i class="bi bi-eye-slash" id="togglePasswordRegisterConf"></i>
         </span>
     </div>
     <div>
@@ -82,10 +82,10 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.js" type="text/javascript"></script>
 
 <script>
-    const togglePassword1 = document.querySelector("#togglePassword1");
-    const togglePassword2 = document.querySelector("#togglePassword2");
-    const password1 = document.querySelector("#floatingInputPassword1");
-    const password2 = document.querySelector("#floatingInputPassword2");
+    const togglePassword1 = document.querySelector("#togglePasswordRegister");
+    const togglePassword2 = document.querySelector("#togglePasswordRegisterConf");
+    const password1 = document.querySelector("#floatingInputPasswordRegister");
+    const password2 = document.querySelector("#floatingInputPasswordRegisterConf");
 
     togglePassword1.addEventListener("click", function() {
         // toggle the type attribute

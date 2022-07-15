@@ -29,7 +29,7 @@ namespace WebService.Controllers.IdentityControllers
         {
             if (ModelState.IsValid)
             {
-                User user = new() { UserName = model.UserName, Name = model.Name, MiddleName = model.MiddleName, SurName = model.Surname, PhoneNumber = model.PhoneNumber };
+                User user = new() { UserName = model.UserName, Name = model.Name, MiddleName = model.MiddleName, SurName = model.SurName, PhoneNumber = model.PhoneNumber };
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)

@@ -11,7 +11,7 @@
 
 <a href="javascript:history.go(-1)"
    class="btn btn-outline-dark">
-    Вернуться к журналу
+    Вернуться
 </a>
 
 <div id="logdetails-@Model.Id">
@@ -20,7 +20,7 @@
     }
 </div>
 
-<div class="row justify-content-center ">
+<div class="row justify-content-center" style="margin-bottom: 50px;">
     <div class="col-md-8 overflow-auto">
         @{
             await Html.RenderPartialAsync("CommentsPartial", new CommentViewModel { RepairLogId = Model.Id }, new ViewDataDictionary(ViewData) { { "status", Model.Status } });

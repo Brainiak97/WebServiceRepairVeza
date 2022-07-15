@@ -21,7 +21,7 @@ namespace WebService.Models.ViewModels.Account
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Недопустимая длина имени")]
         [Display(Name = "Фамилия")]
         [NotNull]
-        public string? Surname { get; set; }
+        public string? SurName { get; set; }
 
         [Required(ErrorMessage = "Введите отчество")]
         [StringLength(50, MinimumLength = 3, ErrorMessage = "Недопустимая длина имени")]
