@@ -1,12 +1,32 @@
 ﻿@model string
 
-<div asp-validation-summary="All" class="text-danger"></div>
+<h2></h2>
 
-<form asp-action="Create" method="post">
-    <div class="form-group">
-        <label for="name">Новая роль</label>
-        <input name="name" class="form-control" />
+<a href="javascript:history.go(-1)"
+   class="btn btn-outline-dark">
+    Вернуться
+</a>
+
+<h1>Создание</h1>
+
+<h4>Роль</h4>
+<hr />
+
+<form class="d-flex flex-column gap-2 needs-validation" novalidate asp-action="Create">
+    <div class="form-floating">
+        <input name="name" class="form-control" placeholder="Введите наименование" required />
+        <label for="name" class="control-label">Наименование роли</label>
+        <div class="invalid-feedback">
+            Введите наименование
+        </div>
     </div>
-    <br />
-    <button type="submit" class="btn btn-secondary">Добавить</button>
+    <div class="form-group">
+        <input type="submit" value="Добавить" class="btn btn-secondary" />
+    </div>
 </form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

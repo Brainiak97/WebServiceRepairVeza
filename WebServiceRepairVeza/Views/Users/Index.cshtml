@@ -3,40 +3,50 @@
     ViewBag.Title = "Список пользователей";
 }
 
+<style>
+    .users{
+        margin-left: 200px;
+        margin-right: 200px;
+    }
+</style>
+
 <h2>Список пользователей</h2>
 
 @if (User.IsInRole("admin"))
 {
     <a class="btn btn-dark" asp-action="Create"><i class="bi-journal-plus"></i> Добавить пользователя</a>
 }
-<table class="table">
-    @foreach (var user in Model)
-    {
-        <tr>
-            <th colspan="2">
-                <h4>Информация о пользователе @user.UserName</h4>
-            </th>
-        </tr>
-        <tr>
-            <td class="col-10">
-                @{
-                    await Html.RenderPartialAsync("DetailsPartial", user);
-                }
-            </td>
-            @if (User.IsInRole("admin"))
-            {
-                <td class="col-2">
-                    <form asp-action="Delete" asp-route-id="@user.Id" method="post" class="d-flex flex-column gap-2">
-                        <a class="btn btn-sm btn-primary" asp-controller="RepairGroup" asp-action="ChangeRepairGroup" asp-route-userid="@user.Id">Группы</a>
-                        <a class="btn btn-sm btn-primary" asp-controller="Roles" asp-action="ChangeRoles" asp-route-userid="@user.Id">Роли</a>
-                        <a class="btn btn-sm btn-secondary" asp-action="Edit" asp-route-id="@user.Id">Изменить</a>
-                        <a class="btn btn-sm btn-secondary" asp-action="ChangePassword" asp-route-id="@user.Id">Сменить пароль</a>
-                        <button type="submit" class="btn btn-sm btn-secondary">
-                            Удалить
-                        </button>
-                    </form>
+
+<div class="justify-content-center users">
+    <table class="table">
+        @foreach (var user in Model)
+        {
+            <tr>
+                <th colspan="2">
+                    <h4>Информация о пользователе @user.UserName</h4>
+                </th>
+            </tr>
+            <tr>
+                <td class="col-10">
+                    @{
+                        await Html.RenderPartialAsync("DetailsPartial", user);
+                    }
                 </td>
-            }
-        </tr>
-    }
-</table>
+                @if (User.IsInRole("admin"))
+                {
+                    <td class="col-2">
+                        <form asp-action="Delete" asp-route-id="@user.Id" method="post" class="d-flex flex-column gap-2">
+                            <a class="btn btn-sm btn-primary" asp-controller="RepairGroup" asp-action="ChangeRepairGroup" asp-route-userid="@user.Id">Группы</a>
+                            <a class="btn btn-sm btn-primary" asp-controller="Roles" asp-action="ChangeRoles" asp-route-userid="@user.Id">Роли</a>
+                            <a class="btn btn-sm btn-secondary" asp-action="Edit" asp-route-id="@user.Id">Изменить</a>
+                            <a class="btn btn-sm btn-secondary" asp-action="ChangePassword" asp-route-id="@user.Id">Сменить пароль</a>
+                            <button type="submit" class="btn btn-sm btn-secondary">
+                                Удалить
+                            </button>
+                        </form>
+                    </td>
+                }
+            </tr>
+        }
+    </table>
+</div>

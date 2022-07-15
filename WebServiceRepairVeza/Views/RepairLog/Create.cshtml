@@ -4,12 +4,19 @@
     ViewData["Title"] = "Create";
 }
 
+<h2></h2>
+
+<a href="javascript:history.go(-1)"
+   class="btn btn-outline-dark">
+    Вернуться
+</a>
+
 <h1>Создание</h1>
 
 <h4>Заявка на ремонт</h4>
 <hr />
 <div class="row">
-    <form class="d-flex flex-column gap-2 needs-validation" novalidate asp-action="Create">
+    <form class="d-flex flex-column gap-2 needs-validation-checkboxes" novalidate asp-action="Create">
         <div class="form-floating">
             <textarea rows="3" asp-for="Malfunctions" class="form-control" placeholder="Введите неисправности" id="floatingTextarea" style="min-height: 100px" required></textarea>
             <label for="floatingTextarea">@Html.DisplayNameFor(modelItem => Model.Malfunctions)</label>
@@ -75,38 +82,6 @@
                 $('#checkboxAll').prop('checked', false);
             else $('#checkboxAll').prop('checked', true);
         });
-    </script>
-    <script>
-        (function() {
-            'use strict';
-            window.addEventListener('load', function() {
-                var forms = document.getElementsByClassName('needs-validation');
-                var validation = Array.prototype.filter.call(forms, function(form) {
-                    form.addEventListener('submit', function(event) {
-                        var failed = false;
-
-                        if ($("[name='groups']:checked").length < 1) {
-                            $("[name='groups']").attr('required', true);
-                            failed = true;
-                        }
-                        else {
-                            $("[name='groups']").attr('required', false);
-                        }
-
-                        if (form.checkValidity() === false) {
-                            failed = true;
-                        }
-
-                        if (failed == true) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
     </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

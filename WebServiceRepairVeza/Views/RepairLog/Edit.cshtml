@@ -12,7 +12,7 @@
 <h4>Заявка на ремонт</h4>
 <hr />
 <div class="row">
-    <form class="d-flex flex-column gap-2 needs-validation" novalidate asp-action="Edit">
+    <form class="d-flex flex-column gap-2 needs-validation-checkboxes" novalidate asp-action="Edit">
         <input type="hidden" asp-for="Id" />
         <input type="hidden" asp-for="AuthorId" />
         <input type="hidden" asp-for="RequestDate" />
@@ -87,38 +87,6 @@
                 $('#checkboxAll').prop('checked', false);
             else $('#checkboxAll').prop('checked', true);
         });
-    </script>
-    <script>
-        (function() {
-            'use strict';
-            window.addEventListener('load', function() {
-                var forms = document.getElementsByClassName('needs-validation');
-                var validation = Array.prototype.filter.call(forms, function(form) {
-                    form.addEventListener('submit', function(event) {
-                        var failed = false;
-
-                        if ($("[name='groups']:checked").length < 1) {
-                            $("[name='groups']").attr('required', true);
-                            failed = true;
-                        }
-                        else {
-                            $("[name='groups']").attr('required', false);
-                        }
-
-                        if (form.checkValidity() === false) {
-                            failed = true;
-                        }
-
-                        if (failed == true) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
     </script>
     @{
         await Html.RenderPartialAsync("_ValidationScriptsPartial");

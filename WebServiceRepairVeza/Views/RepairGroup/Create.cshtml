@@ -3,33 +3,41 @@
     ViewData["Title"] = "Create";
 }
 
+<h2></h2>
+
+<a href="javascript:history.go(-1)"
+   class="btn btn-outline-dark">
+    Вернуться
+</a>
+
 <h1>Создание</h1>
 
 <h4>Ремонтная группа</h4>
 <hr />
 <div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="Name" class="control-label"></label>
-                <input asp-for="Name" class="form-control" />
-                <span asp-validation-for="Name" class="text-danger"></span>
+    <form class="d-flex flex-column gap-2 needs-validation" novalidate asp-action="Create">
+        <div class="form-floating">
+            <input asp-for="Name" class="form-control" placeholder="Введите наименование" id="floatingInputName" required />
+            <label for="floatingInputName" class="control-label">@Html.DisplayNameFor(modelItem => Model.Name)</label>
+            <div class="invalid-feedback">
+                Введите краткое наименование
             </div>
-            <div class="form-group">
-                <label asp-for="Description" class="control-label"></label>
-                <input asp-for="Description" class="form-control" />
-                <span asp-validation-for="Description" class="text-danger"></span>
+        </div>
+        <div class="form-floating">
+            <input asp-for="Description" class="form-control" placeholder="Введите описание" id="floatingInputDescription" required />
+            <label for="floatingInputDescription" class="control-label">@Html.DisplayNameFor(modelItem => Model.Description)</label>
+            <div class="invalid-feedback">
+                Введите полное наименование
             </div>
-            <br />
-            <div class="form-group">
-                <input type="submit" value="Создать" class="btn btn-secondary" />
-            </div>
-        </form>
-    </div>
+        </div>
+        <div class="form-group">
+            <input type="submit" value="Добавить" class="btn btn-secondary" />
+        </div>
+    </form>
 </div>
+
 @section Scripts {
     @{
-    await Html.RenderPartialAsync("_ValidationScriptsPartial");
-}
-}
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }

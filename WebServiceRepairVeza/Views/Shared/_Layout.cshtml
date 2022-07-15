@@ -17,39 +17,39 @@
     <style type="text/css" media="all">
 
         /*.navbar .dropdown-menu-end {
-                    right: 0;
-                    left: auto;
-                }
+                                    right: 0;
+                                    left: auto;
+                                }
 
-                .navbar .nav-item .dropdown-menu {
-                    display: block;
-                    opacity: 0;
-                    visibility: hidden;
-                    transition: .3s;
-                    margin-top: 0;
-                }
+                                .navbar .nav-item .dropdown-menu {
+                                    display: block;
+                                    opacity: 0;
+                                    visibility: hidden;
+                                    transition: .3s;
+                                    margin-top: 0;
+                                }
 
-                .navbar .nav-item:hover .nav-link {
-                    color: #fff;
-                }
+                                .navbar .nav-item:hover .nav-link {
+                                    color: #fff;
+                                }
 
-                .navbar .dropdown-menu.fade-down {
-                    top: 80%;
-                    transform: rotateX(-75deg);
-                    transform-origin: 0% 0%;
-                }
+                                .navbar .dropdown-menu.fade-down {
+                                    top: 80%;
+                                    transform: rotateX(-75deg);
+                                    transform-origin: 0% 0%;
+                                }
 
-                .navbar .dropdown-menu.fade-up {
-                    top: 180%;
-                }
+                                .navbar .dropdown-menu.fade-up {
+                                    top: 180%;
+                                }
 
-                .navbar .nav-item:hover .dropdown-menu {
-                    transition: .3s;
-                    opacity: 1;
-                    visibility: visible;
-                    top: 100%;
-                    transform: rotateX(0deg);
-                }*/
+                                .navbar .nav-item:hover .dropdown-menu {
+                                    transition: .3s;
+                                    opacity: 1;
+                                    visibility: visible;
+                                    top: 100%;
+                                    transform: rotateX(0deg);
+                                }*/
     </style>
 
 </head>
@@ -156,6 +156,55 @@
     @await RenderSectionAsync("Scripts", required: false)
 
     <script>
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                // Fetch all the forms we want to apply custom Bootstrap validation styles to
+                var forms = document.getElementsByClassName('needs-validation');
+                // Loop over them and prevent submission
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        if (form.checkValidity() === false) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
+        (function() {
+            'use strict';
+            window.addEventListener('load', function() {
+                var forms = document.getElementsByClassName('needs-validation-checkboxes');
+                var validation = Array.prototype.filter.call(forms, function(form) {
+                    form.addEventListener('submit', function(event) {
+                        var failed = false;
+
+                        if ($("[name='groups']:checked").length < 1) {
+                            $("[name='groups']").attr('required', true);
+                            failed = true;
+                        }
+                        else {
+                            $("[name='groups']").attr('required', false);
+                        }
+
+                        if (form.checkValidity() === false) {
+                            failed = true;
+                        }
+
+                        if (failed == true) {
+                            event.preventDefault();
+                            event.stopPropagation();
+                        }
+
+                        form.classList.add('was-validated');
+                    }, false);
+                });
+            }, false);
+        })();
+
         document.addEventListener("DOMContentLoaded", () => {
             if (Notification.permission == "default") {
                 setTimeout(() =>

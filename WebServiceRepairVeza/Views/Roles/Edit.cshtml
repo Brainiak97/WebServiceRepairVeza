@@ -1,17 +1,37 @@
 ﻿@using Microsoft.AspNetCore.Identity
 @model IdentityRole<int>
 
-<div asp-validation-summary="All" class="text-danger"></div>
+<h2></h2>
 
-<form asp-action="Edit" method="post">
+<a href="javascript:history.go(-1)"
+   class="btn btn-outline-dark">
+    Вернуться
+</a>
+
+<h1>Изменение</h1>
+
+<h4>Роль</h4>
+<hr />
+
+<form class="d-flex flex-column gap-2 needs-validation" novalidate asp-action="Edit">
     <input type="hidden" asp-for="Id" />
     <input type="hidden" asp-for="ConcurrencyStamp" />
     <input type="hidden" asp-for="NormalizedName" />
 
-    <div class="form-group">
-        <label asp-for="Name" class="control-label"></label>
-        <input type="text" asp-for="Name" class="form-control" />
+    <div class="form-floating">
+        <input asp-for="Name" id="name" class="form-control" placeholder="Введите наименование" required />
+        <label for="name" class="control-label">Наименование роли</label>
+        <div class="invalid-feedback">
+            Введите наименование
+        </div>
     </div>
-    <br />
-    <button type="submit" class="btn btn-secondary">Сохранить</button>
+    <div class="form-group">
+        <input type="submit" value="Сохранить" class="btn btn-secondary" />
+    </div>
 </form>
+
+@section Scripts {
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
+    }
