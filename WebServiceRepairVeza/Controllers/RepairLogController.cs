@@ -201,6 +201,36 @@ namespace WebService.Controllers
             }
         }
 
+        // POST: RepairLog/ToExecute/5
+        [HttpPost]
+        [Authorize]
+        public async Task ToWork(int id)
+        {
+            try
+            {
+                await _repairLogService.ToWork(id);
+
+                var comment = new CommentViewModel()
+                {
+                    Date = DateTime.Now,
+                    Text = $"Заявка #{id} в работе",
+                    RepairLogId = id,
+                    CommentatorId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value),
+                };
+
+                await AddServerComment(comment);
+
+                await _repairLogIndexHub.Clients.Group("RepairLogIndex").SendAsync("UpdateLog", id);
+                await _repairLogDetailsHub.Clients.Group($"LogGroupDetails#{id}").SendAsync("UpdateLog", id);
+
+                _logger.LogInformation($"The {nameof(id)} update was successful.");
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError($"The {nameof(RepairLogDto)} update failed.", ex);
+            }
+        }
+
         // POST: RepairLog/ToChecking/5
         [HttpPost]
         [Authorize]
@@ -268,7 +298,7 @@ namespace WebService.Controllers
         {
             try
             {
-                await _repairLogService.ToExecute(id);
+                await _repairLogService.ToWork(id);
 
                 var comment = new CommentViewModel()
                 {

@@ -148,15 +148,9 @@
             </li>
             @if (User.IsInRole("admin") || User.IsInRole("chief"))
             {
-                @*<li class="context-menu__item">
-                    <a href="#" class="context-menu__link" data-action="Edit"><i class="bi bi-pencil-square"></i> Изменить</a>
-                </li>*@
                 <li class="context-menu__item">
                     <a href="#" class="context-menu__link" data-action="Archive"><i class="bi bi-journal-arrow-down"></i> В архив</a>
                 </li>
-               @* <li class="context-menu__item">
-                    <a href="#" class="context-menu__link" data-action="Delete"><i class="bi bi-journal-x"></i> Удалить</a>
-                </li>*@
             }
         </ul>
     </nav>
@@ -172,28 +166,44 @@
             <div class="col-3 p-0 border sortable column" data-card="Request">
                 @foreach (var item in Model.Where(_ => _.Status == Core.Models.RepairStatus.Request))
                 {
-                    await Html.RenderPartialAsync("IndexPartial", item);
+                    <a class="block ui-draggable ui-draggable-handle" id="log-@item.Id" asp-controller="RepairLog" asp-action="Details" asp-route-id="@item.Id">
+                        @{
+                            await Html.RenderPartialAsync("IndexPartial", item);
+                        }
+                    </a>
                 }
             </div>
 
             <div class="col-3 p-0 border sortable column" data-card="AtWork">
                 @foreach (var item in Model.Where(_ => _.Status == Core.Models.RepairStatus.AtWork))
                 {
-                    await Html.RenderPartialAsync("IndexPartial", item);
+                    <a class="block ui-draggable ui-draggable-handle" id="log-@item.Id" asp-controller="RepairLog" asp-action="Details" asp-route-id="@item.Id">
+                        @{
+                            await Html.RenderPartialAsync("IndexPartial", item);
+                        }
+                    </a>
                 }
             </div>
 
             <div class="col-3 p-0 border sortable column" data-card="Check">
                 @foreach (var item in Model.Where(_ => _.Status == Core.Models.RepairStatus.Check))
                 {
-                    await Html.RenderPartialAsync("IndexPartial", item);
+                    <a class="block ui-draggable ui-draggable-handle" id="log-@item.Id" asp-controller="RepairLog" asp-action="Details" asp-route-id="@item.Id">
+                        @{
+                            await Html.RenderPartialAsync("IndexPartial", item);
+                        }
+                    </a>
                 }
             </div>
 
             <div class="col-3 p-0 border sortable column" data-card="Completed">
                 @foreach (var item in Model.Where(_ => _.Status == Core.Models.RepairStatus.Completed))
                 {
-                    await Html.RenderPartialAsync("IndexPartial", item);
+                    <a class="block ui-draggable ui-draggable-handle" id="log-@item.Id" asp-controller="RepairLog" asp-action="Details" asp-route-id="@item.Id">
+                        @{
+                            await Html.RenderPartialAsync("IndexPartial", item);
+                        }
+                    </a>
                 }
             </div>
         </div>
@@ -490,7 +500,7 @@ else
                                 url: '/Repairlog/ToRequest',
                                 data: { id: $(ui.draggable).prop('id').replace('log-', '') },
                                 success: function () {
-                                    console.log('ToExecute done');
+                                    console.log('ToRequest done');
                                 },
                                 error: function () {
                                     console.log('Failed ');
@@ -503,7 +513,7 @@ else
                             if (oldCol == "Request") {
                                 $.ajax({
                                     type: 'POST',
-                                    url: '/Repairlog/ToExecute',
+                                    url: '/Repairlog/ToWork',
                                     data: { id: $(ui.draggable).prop('id').replace('log-', '') },
                                     success: function () {
                                         console.log('ToExecute done');

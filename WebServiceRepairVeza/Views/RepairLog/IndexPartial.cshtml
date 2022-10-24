@@ -4,158 +4,152 @@
 @{
     if (Model.Status == Core.Models.RepairStatus.AtWork)
     {
-    <a class="block ui-draggable ui-draggable-handle" id="log-@Model.Id" asp-controller="RepairLog" asp-action="Details" asp-route-id="@Model.Id">
-                <input id="status" type="hidden" asp-for="Status" />
-                <div class="card border-primary rounded-3 m-2">
-                    <div class="card-header bg-primary text-white h6">
-                        <div class="row">
-                            <div class="col-3 text-start">
-                                <span class="badge rounded-pill bg-dark">
-                                    #@Model.Id
-                                </span>
-                            </div>
-                            <div class="col-9 text-end flex-nowrap">
-                                <u>@Html.DisplayFor(modelItem => Model.RequestDate)</u>
-                            </div>
-                        </div>
+        <input id="status" type="hidden" asp-for="Status" />
+        <div class="card border-primary rounded-3 m-2">
+            <div class="card-header bg-primary text-white h6">
+                <div class="row">
+                    <div class="col-3 text-start">
+                        <span class="badge rounded-pill bg-dark">
+                            #@Model.Id
+                        </span>
                     </div>
-                    <div class="row card-body">
-                        <div class="row card-text justify-content-center">
-                            <div>
-                                @Html.DisplayFor(modelItem => Model.Malfunctions)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="text-muted text-center h6 m-0">
-                            @Html.DisplayNameFor(modelItem => Model.ChangedDate) @Html.DisplayFor(modelItem => Model.ChangedDate)
-                        </div>
+                    <div class="col-9 text-end flex-nowrap">
+                        <u>@Html.DisplayFor(modelItem => Model.RequestDate)</u>
                     </div>
                 </div>
-    </a>
+            </div>
+            <div class="row card-body">
+                <div class="row card-text justify-content-center">
+                    <div>
+                        @Html.DisplayFor(modelItem => Model.Malfunctions)
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="text-muted text-center h6 m-0">
+                    @Html.DisplayNameFor(modelItem => Model.ChangedDate) @Html.DisplayFor(modelItem => Model.ChangedDate)
+                </div>
+            </div>
+        </div>
     }
     if (Model.Status == Core.Models.RepairStatus.Check)
     {
-    <a class="block ui-draggable ui-draggable-handle" id="log-@Model.Id" asp-controller="RepairLog" asp-action="Details" asp-route-id="@Model.Id">
-                <div class="card border-warning rounded-3 m-2">
-                    <div class="card-header bg-warning text-white h6">
-                        <div class="row">
-                            <div class="col-3 text-start">
-                                <span class="badge rounded-pill bg-dark">
-                                    #@Model.Id
-                                </span>
-                            </div>
-                            <div class="col-9 text-end flex-nowrap">
-                                <u>@Html.DisplayFor(modelItem => Model.RequestDate)</u>
-                            </div>
-                        </div>
+        <input id="status" type="hidden" asp-for="Status" />
+        <div class="card border-warning rounded-3 m-2">
+            <div class="card-header bg-warning text-white h6">
+                <div class="row">
+                    <div class="col-3 text-start">
+                        <span class="badge rounded-pill bg-dark">
+                            #@Model.Id
+                        </span>
                     </div>
-                    <div class="row card-body">
-                        <div class="row card-text justify-content-center">
-                            <div>
-                                @Html.DisplayFor(modelItem => Model.Malfunctions)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="text-muted text-center h6 m-0">
-                            @Html.DisplayNameFor(modelItem => Model.ChangedDate) @Html.DisplayFor(modelItem => Model.ChangedDate)
-                        </div>
+                    <div class="col-9 text-end flex-nowrap">
+                        <u>@Html.DisplayFor(modelItem => Model.RequestDate)</u>
                     </div>
                 </div>
-    </a>
+            </div>
+            <div class="row card-body">
+                <div class="row card-text justify-content-center">
+                    <div>
+                        @Html.DisplayFor(modelItem => Model.Malfunctions)
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="text-muted text-center h6 m-0">
+                    @Html.DisplayNameFor(modelItem => Model.ChangedDate) @Html.DisplayFor(modelItem => Model.ChangedDate)
+                </div>
+            </div>
+        </div>
     }
     if (Model.Status == Core.Models.RepairStatus.Completed)
     {
-    <a class="block ui-draggable ui-draggable-handle" id="log-@Model.Id" asp-controller="RepairLog" asp-action="Details" asp-route-id="@Model.Id">
-                <div class="card border-success rounded-3 m-2">
-                    <div class="card-header bg-success text-white h6">
-                        <div class="row">
-                            <div class="col-3 text-start">
-                                <span class="badge rounded-pill bg-dark">
-                                    #@Model.Id
-                                </span>
-                            </div>
-                            <div class="col-9 text-end flex-nowrap">
-                                <u>@Html.DisplayFor(modelItem => Model.RequestDate)</u>
-                            </div>
-                        </div>
+        <input id="status" type="hidden" asp-for="Status" />
+        <div class="card border-success rounded-3 m-2">
+            <div class="card-header bg-success text-white h6">
+                <div class="row">
+                    <div class="col-3 text-start">
+                        <span class="badge rounded-pill bg-dark">
+                            #@Model.Id
+                        </span>
                     </div>
-                    <div class="row card-body">
-                        <div class="row card-text justify-content-center">
-                            <div>
-                                @Html.DisplayFor(modelItem => Model.Malfunctions)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="text-muted text-center h6 m-0">
-                            @Html.DisplayNameFor(modelItem => Model.ChangedDate) @Html.DisplayFor(modelItem => Model.ChangedDate)
-                        </div>
+                    <div class="col-9 text-end flex-nowrap">
+                        <u>@Html.DisplayFor(modelItem => Model.RequestDate)</u>
                     </div>
                 </div>
-        </a>
+            </div>
+            <div class="row card-body">
+                <div class="row card-text justify-content-center">
+                    <div>
+                        @Html.DisplayFor(modelItem => Model.Malfunctions)
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="text-muted text-center h6 m-0">
+                    @Html.DisplayNameFor(modelItem => Model.ChangedDate) @Html.DisplayFor(modelItem => Model.ChangedDate)
+                </div>
+            </div>
+        </div>
     }
     if (Model.Status == Core.Models.RepairStatus.Request)
     {
-        <a class="block ui-draggable ui-draggable-handle" id="log-@Model.Id" asp-controller="RepairLog" asp-action="Details" asp-route-id="@Model.Id">
-            <div class="card border-secondary rounded-3 m-2">
-                    <div class="card-header bg-secondary text-white h6">
-                        <div class="row">
-                            <div class="col-3 text-start">
-                                <span class="badge rounded-pill bg-dark">
-                                    #@Model.Id
-                                </span>
-                            </div>
-                            <div class="col-9 text-end flex-nowrap">
-                                <u>@Html.DisplayFor(modelItem => Model.RequestDate)</u>
-                            </div>
-                        </div>
+        <input id="status" type="hidden" asp-for="Status" />
+        <div class="card border-secondary rounded-3 m-2">
+            <div class="card-header bg-secondary text-white h6">
+                <div class="row">
+                    <div class="col-3 text-start">
+                        <span class="badge rounded-pill bg-dark">
+                            #@Model.Id
+                        </span>
                     </div>
-                    <div class="row card-body">
-                        <div class="row card-text justify-content-center">
-                            <div>
-                                @Html.DisplayFor(modelItem => Model.Malfunctions)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="text-muted text-center h6 m-0">
-                            @Html.DisplayNameFor(modelItem => Model.ChangedDate) @Html.DisplayFor(modelItem => Model.ChangedDate)
-                        </div>
+                    <div class="col-9 text-end flex-nowrap">
+                        <u>@Html.DisplayFor(modelItem => Model.RequestDate)</u>
                     </div>
                 </div>
-    </a>
+            </div>
+            <div class="row card-body">
+                <div class="row card-text justify-content-center">
+                    <div>
+                        @Html.DisplayFor(modelItem => Model.Malfunctions)
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="text-muted text-center h6 m-0">
+                    @Html.DisplayNameFor(modelItem => Model.ChangedDate) @Html.DisplayFor(modelItem => Model.ChangedDate)
+                </div>
+            </div>
+        </div>
     }
     if (Model.Status == Core.Models.RepairStatus.Archive)
     {
-    <a class="block ui-draggable ui-draggable-handle" id="log-@Model.Id" asp-controller="RepairLog" asp-action="Details" asp-route-id="@Model.Id">
-                <div class="card border-danger rounded-3 m-2">
-                    <div class="card-header bg-danger text-white h6">
-                        <div class="row">
-                            <div class="col-3 text-start">
-                                <span class="badge rounded-pill bg-dark">
-                                    #@Model.Id
-                                </span>
-                            </div>
-                            <div class="col-9 text-end flex-nowrap">
-                                <u>@Html.DisplayFor(modelItem => Model.RequestDate)</u>
-                            </div>
-                        </div>
+        <input id="status" type="hidden" asp-for="Status" />
+        <div class="card border-danger rounded-3 m-2">
+            <div class="card-header bg-danger text-white h6">
+                <div class="row">
+                    <div class="col-3 text-start">
+                        <span class="badge rounded-pill bg-dark">
+                            #@Model.Id
+                        </span>
                     </div>
-                    <div class="row card-body">
-                        <div class="row card-text justify-content-center">
-                            <div>
-                                @Html.DisplayFor(modelItem => Model.Malfunctions)
-                            </div>
-                        </div>
-                    </div>
-                    <div class="card-footer">
-                        <div class="text-muted text-center h6 m-0">
-                            @Html.DisplayNameFor(modelItem => Model.ChangedDate) @Html.DisplayFor(modelItem => Model.ChangedDate)
-                        </div>
+                    <div class="col-9 text-end flex-nowrap">
+                        <u>@Html.DisplayFor(modelItem => Model.RequestDate)</u>
                     </div>
                 </div>
-    </a>
+            </div>
+            <div class="row card-body">
+                <div class="row card-text justify-content-center">
+                    <div>
+                        @Html.DisplayFor(modelItem => Model.Malfunctions)
+                    </div>
+                </div>
+            </div>
+            <div class="card-footer">
+                <div class="text-muted text-center h6 m-0">
+                    @Html.DisplayNameFor(modelItem => Model.ChangedDate) @Html.DisplayFor(modelItem => Model.ChangedDate)
+                </div>
+            </div>
+        </div>
     }
 }

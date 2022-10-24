@@ -172,6 +172,22 @@ namespace BLL.Services
                 await _repository.Update(log);
             }
         }
+        
+        public async Task ToWork(int logId)
+        {
+            var log = await _repository
+                .GetQuery()
+                .Include(log => log.Comments)
+                .FirstOrDefaultAsync(log => log.Id == logId);
+
+            if (log != null)
+            {
+                log.Status = RepairStatus.AtWork;
+                log.ChangedDate = DateTime.Now;
+
+                await _repository.Update(log);
+            }
+        }
 
         public async Task ToRequest(int logId)
         {
