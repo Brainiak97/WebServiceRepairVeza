@@ -118,11 +118,11 @@ namespace WebService.Controllers
         }
 
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> ChangeRepairGroup(int userId)
+        public async Task<IActionResult> ChangeRepairGroup(int id)
         {
-            var user = _mapper.Map<User>(await _userService.GetItem(userId));
+            var user = _mapper.Map<User>(await _userService.GetItem(id));
             // получем список групп пользователя
-            var userGroups = _mapper.Map<IEnumerable<RepairGroupViewModel>>(await _repairGroupService.GetUserGroups(userId));
+            var userGroups = _mapper.Map<IEnumerable<RepairGroupViewModel>>(await _repairGroupService.GetUserGroups(id));
 
             if (user != null && userGroups != null)
             {
@@ -153,7 +153,7 @@ namespace WebService.Controllers
                     await _userService.EditGroupsIntoUserAsync(userId, groups);
 
                     _logger.LogInformation($"The {nameof(RepairGroupDto)} changing repair group was successful.");
-                    return RedirectToAction("Index", "Users");
+                    return RedirectToAction("UserProfile", "Users", new { id = userId });
                 }
             }
             catch (Exception ex)

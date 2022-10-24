@@ -1,5 +1,4 @@
 ﻿@model WebService.Models.ViewModels.RepairLog.RepairLogViewModel
-<script src="https://unpkg.com/@@aspnet/signalr@@1.0.0-rc1-final/dist/browser/signalr.js"></script>
 
 @using BLL.Models
 @using WebService.Models.ViewModels.Comment
@@ -14,14 +13,18 @@
     Вернуться
 </a>
 
-<div id="logdetails-@Model.Id">
-    @{
-        await Html.RenderPartialAsync("DetailsPartial", Model);
-    }
+<div>
+    <div id="logdetails-@Model.Id">
+        @{
+            await Html.RenderPartialAsync("DetailsPartial", Model);
+        }
+    </div>
 </div>
 
 <div class="row justify-content-center" style="margin-bottom: 50px;">
     <div class="col-md-8 overflow-auto">
+        <hr />
+
         @{
             await Html.RenderPartialAsync("CommentsPartial", new CommentViewModel { RepairLogId = Model.Id }, new ViewDataDictionary(ViewData) { { "status", Model.Status } });
         }
@@ -41,7 +44,7 @@
                 type: 'GET',
                 data: { logId: logId },
 
-                success: function(partialView) {
+                success: function (partialView) {
                     $(`#logdetails-${logId}`).html(partialView);
                     console.log(`logdetails-${logId} updated`);
                 }
@@ -52,10 +55,10 @@
         console.log('logDetailsHub disconnected!');
     })
 
-    logDetailsConnection.start().then(function() {
+    logDetailsConnection.start().then(function () {
         logDetailsConnection.invoke("EnterInLogGroup", @Model.Id);
         console.log('logDetailsHub connected!');
-    }).catch(function(err) {
+    }).catch(function (err) {
         console.log('logDetailsHub connection error!');
     });
 </script>

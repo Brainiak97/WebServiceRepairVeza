@@ -15,7 +15,7 @@
 
 <h4>Заявка на ремонт</h4>
 <hr />
-<div class="row">
+<div class="container row-cols-lg-1 row-cols-1 d-flex justify-content-center">
     <form class="d-flex flex-column gap-2 needs-validation-checkboxes" novalidate asp-action="Create">
         <div class="form-floating">
             <textarea rows="3" asp-for="Malfunctions" class="form-control" placeholder="Введите неисправности" id="floatingTextarea" style="min-height: 100px" required></textarea>
@@ -58,7 +58,7 @@
 
 @section Scripts {
     <script type="text/javascript">
-        (function($) { })(jQuery);
+        (function ($) { })(jQuery);
 
         function checkRequired() {
             if ($("[name='groups']:checked").length < 1) {
@@ -69,7 +69,7 @@
             }
         }
 
-        $('#checkboxAll').click(function() {
+        $('#checkboxAll').click(function () {
             if ($(this).is(':checked')) {
                 $('#controls input:checkbox').prop('checked', true);
             } else if (!$(this).is(':checked')) {
@@ -77,13 +77,10 @@
             }
         });
 
-        $('.checkBoxClass').on('change', function() {
+        $('.checkBoxClass').on('change', function () {
             if ($('.checkBoxClass:checked').length != $('.checkBoxClass').length)
                 $('#checkboxAll').prop('checked', false);
             else $('#checkboxAll').prop('checked', true);
         });
     </script>
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
     }

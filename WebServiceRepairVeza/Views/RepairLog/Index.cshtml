@@ -133,11 +133,10 @@
 {
     <h2>Активные заявки</h2>
 
-    <a class="btn btn-dark" asp-controller="RepairLog" asp-action="Create"><i class="bi bi-journal-plus"></i> Создать</a>
+    <a class="btn btn-dark" asp-controller="RepairLog" asp-action="Create"><i class="bi bi-journal-plus"></i> Добавить</a>
 
     <nav id="context-menu" class="context-menu">
         <ul class="context-menu__items">
-
             @if (User.IsInRole("admin") || User.IsInRole("chief"))
             {
                 <li class="context-menu__item">
@@ -149,15 +148,15 @@
             </li>
             @if (User.IsInRole("admin") || User.IsInRole("chief"))
             {
-                <li class="context-menu__item">
+                @*<li class="context-menu__item">
                     <a href="#" class="context-menu__link" data-action="Edit"><i class="bi bi-pencil-square"></i> Изменить</a>
-                </li>
+                </li>*@
                 <li class="context-menu__item">
                     <a href="#" class="context-menu__link" data-action="Archive"><i class="bi bi-journal-arrow-down"></i> В архив</a>
                 </li>
-                <li class="context-menu__item">
+               @* <li class="context-menu__item">
                     <a href="#" class="context-menu__link" data-action="Delete"><i class="bi bi-journal-x"></i> Удалить</a>
-                </li>
+                </li>*@
             }
         </ul>
     </nav>
@@ -213,18 +212,10 @@ else
 
 @section Scripts {
     <script type="text/javascript">
-        (function($) { })(jQuery);
+        (function ($) { })(jQuery);
 
-        $(function() {
+        $(function () {
             "use strict";
-
-            //////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////
-            //
-            // H E L P E R    F U N C T I O N S
-            //
-            //////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////
 
             /*
              * Function to check if we clicked inside an element with a particular class
@@ -269,14 +260,6 @@ else
                 }
             }
 
-            //////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////
-            //
-            // C O R E    F U N C T I O N S
-            //
-            //////////////////////////////////////////////////////////////////////////////
-            //////////////////////////////////////////////////////////////////////////////
-
             /*
              * Variables.
              */
@@ -318,7 +301,7 @@ else
              * Listens for contextmenu events.
              */
             function contextListener() {
-                document.addEventListener("contextmenu", function(e) {
+                document.addEventListener("contextmenu", function (e) {
                     taskItemInContext = clickInsideElement(e, taskItemClassName);
 
                     if (taskItemInContext) {
@@ -336,7 +319,7 @@ else
              * Listens for click events.
              */
             function clickListener() {
-                document.addEventListener("click", function(e) {
+                document.addEventListener("click", function (e) {
                     var clickeElIsLink = clickInsideElement(e, contextMenuLinkClassName);
 
                     if (clickeElIsLink) {
@@ -355,7 +338,7 @@ else
              * Listens for keyup events.
              */
             function keyupListener() {
-                window.onkeyup = function(e) {
+                window.onkeyup = function (e) {
                     if (e.keyCode === 27) {
                         toggleMenuOff();
                     }
@@ -366,7 +349,7 @@ else
              * Window resize event listener
              */
             function resizeListener() {
-                window.onresize = function(e) {
+                window.onresize = function (e) {
                     toggleMenuOff();
                 };
             }
@@ -429,10 +412,10 @@ else
                         type: 'POST',
                         url: '/Repairlog/ToArchive',
                         data: { id: logId },
-                        success: function() {
+                        success: function () {
                             console.log('ToArchive done');
                         },
-                        error: function() {
+                        error: function () {
                             console.log('Failed ');
                         }
                     })
@@ -442,10 +425,10 @@ else
                         type: 'POST',
                         url: '/Repairlog/Delete',
                         data: { id: logId },
-                        success: function() {
+                        success: function () {
                             console.log('Delete done');
                         },
-                        error: function() {
+                        error: function () {
                             console.log('Failed ');
                         }
                     });
@@ -455,11 +438,11 @@ else
                         type: 'GET',
                         url: '/RepairLog/GetExecutorsComponent',
                         data: { id: logId },
-                        success: function(partialview) {
+                        success: function (partialview) {
                             $("#modal-content-template").html(partialview);
                             console.log('GetExecutorsComponent done');
                         },
-                        error: function() {
+                        error: function () {
                             console.log('Failed GetExecutorsComponent');
                         }
                     })
@@ -487,13 +470,13 @@ else
 
             $(".sortable").droppable({
                 accept: ".block",
-                over: function(event, ui) {
+                over: function (event, ui) {
                     $(this).addClass('hover');
                 },
-                out: function(event, ui) {
+                out: function (event, ui) {
                     $(this).removeClass('hover');
                 },
-                drop: function(event, ui) {
+                drop: function (event, ui) {
                     if ($(ui.draggable).parent().data('card') != $(this).data('card')) {
                         var oldCol = $(ui.draggable).parent().data('card');
 
@@ -506,10 +489,10 @@ else
                                 type: 'POST',
                                 url: '/Repairlog/ToRequest',
                                 data: { id: $(ui.draggable).prop('id').replace('log-', '') },
-                                success: function() {
+                                success: function () {
                                     console.log('ToExecute done');
                                 },
-                                error: function() {
+                                error: function () {
                                     console.log('Failed ');
                                 }
                             });
@@ -522,10 +505,10 @@ else
                                     type: 'POST',
                                     url: '/Repairlog/ToExecute',
                                     data: { id: $(ui.draggable).prop('id').replace('log-', '') },
-                                    success: function() {
+                                    success: function () {
                                         console.log('ToExecute done');
                                     },
-                                    error: function() {
+                                    error: function () {
                                         console.log('Failed ');
                                     }
                                 });
@@ -535,10 +518,10 @@ else
                                     type: 'POST',
                                     url: '/Repairlog/ToRevision',
                                     data: { id: $(ui.draggable).prop('id').replace('log-', '') },
-                                    success: function() {
+                                    success: function () {
                                         console.log('ToRevision done');
                                     },
-                                    error: function() {
+                                    error: function () {
                                         console.log('Failed ');
                                     }
                                 })
@@ -551,10 +534,10 @@ else
                                 type: 'POST',
                                 url: '/Repairlog/ToChecking',
                                 data: { id: $(ui.draggable).prop('id').replace('log-', '') },
-                                success: function() {
+                                success: function () {
                                     console.log('ToChecking done');
                                 },
-                                error: function() {
+                                error: function () {
                                     console.log('Failed ');
                                 }
                             })
@@ -566,10 +549,10 @@ else
                                 type: 'POST',
                                 url: '/Repairlog/ToComplete',
                                 data: { id: $(ui.draggable).prop('id').replace('log-', '') },
-                                success: function() {
+                                success: function () {
                                     console.log('ToComplete done');
                                 },
-                                error: function() {
+                                error: function () {
                                     console.log('Failed ');
                                 }
                             })
@@ -577,7 +560,7 @@ else
                             console.log('карточка не изменила статус');
                         }
                     }
-                    $(this).removeClass('hover');//убираем выделение
+                    $(this).removeClass('hover');
                 }
             });
         });
@@ -594,7 +577,7 @@ else
                     type: 'GET',
                     data: { logId: logId },
 
-                    success: function(partialView) {
+                    success: function (partialView) {
                         $(`#log-${logId}`).html(partialView);
                         console.log(`log-${logId} updated`);
                         if ($(`#log-${logId}`).children("#status").val() == "Request") {
@@ -636,10 +619,10 @@ else
             $(`#log-${logId}`).remove();
         });
 
-        indexConnection.start().then(function() {
+        indexConnection.start().then(function () {
             indexConnection.invoke("EnterInLogGroup");
             console.log('repairlogindex connected!');
-        }).catch(function(err) {
+        }).catch(function (err) {
             console.log('repairlogindex connection error!');
         });
     </script>

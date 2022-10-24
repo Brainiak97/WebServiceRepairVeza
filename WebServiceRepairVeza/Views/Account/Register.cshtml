@@ -1,45 +1,109 @@
 ﻿@using WebService.Models.ViewModels.Account
 @model RegisterViewModel
 
-<h2>Регистрация нового пользователя</h2>
-<form method="post" asp-controller="Account" asp-action="Register">
-    <div asp-validation-summary="ModelOnly"></div>
-    <div>
-        <label asp-for="UserName">@Html.DisplayNameFor(modelItem => Model.UserName)</label><br />
-        <input asp-for="UserName" />
-        <span asp-validation-for="UserName"></span>
-    </div>
-    <div>
-        <label asp-for="SurName">@Html.DisplayNameFor(modelItem => Model.SurName)</label><br />
-        <input asp-for="SurName" />
-        <span asp-validation-for="SurName"></span>
-    </div>
-    <div>
-        <label asp-for="Name">@Html.DisplayNameFor(modelItem => Model.Name)</label><br />
-        <input asp-for="Name" />
-        <span asp-validation-for="Name"></span>
-    </div>
-    <div>
-        <label asp-for="MiddleName">@Html.DisplayNameFor(modelItem => Model.MiddleName)</label><br />
-        <input asp-for="MiddleName" />
-        <span asp-validation-for="MiddleName"></span>
-    </div>
-    <div>
-        <label asp-for="PhoneNumber">@Html.DisplayNameFor(modelItem => Model.PhoneNumber)</label><br />
-        <input asp-for="PhoneNumber" class="phone" />
-        <span asp-validation-for="PhoneNumber"></span>
-    </div>
-    <div>
-        <label asp-for="Password">@Html.DisplayNameFor(modelItem => Model.Password)</label><br />
-        <input asp-for="Password" />
-        <span asp-validation-for="Password"></span>
-    </div>
-    <div>
-        <label asp-for="PasswordConfirm">@Html.DisplayNameFor(modelItem => Model.PasswordConfirm)</label><br />
-        <input asp-for="PasswordConfirm" />
-        <span asp-validation-for="PasswordConfirm"></span>
-    </div>
-    <div>
-        <input type="submit" value="Регистрация" />
-    </div>
-</form>
+<style>
+    .form-floating-group input {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
+    }
+
+    #togglePasswordRegister, #togglePasswordRegisterConf {
+        cursor: pointer;
+    }
+</style>
+
+<h2></h2>
+
+<div class="container row-cols-lg-3 d-flex justify-content-center">
+    <form id="contact-form" class="d-flex flex-column gap-2" method="post" asp-controller="Account" asp-action="Register">
+        <legend>
+            Впервые здесь?<br>
+            @Html.ActionLink("У меня уже есть аккаунт", "Login")
+        </legend>
+
+        <div class="form-floating">
+            <input asp-for="UserName" class="form-control" placeholder="Введите логин" id="floatingInputUserNameRegister" />
+            <label for="floatingInputUserNameRegister" class="control-label">@Html.DisplayNameFor(modelItem => Model.UserName)</label>
+            <span class="text-danger" asp-validation-for="UserName"></span>
+        </div>
+        <div class="form-floating">
+            <input asp-for="SurName" class="form-control" placeholder="Введите фамилию" id="floatingInputSurName" />
+            <label for="floatingInputSurName" class="control-label">@Html.DisplayNameFor(modelItem => Model.SurName)</label>
+            <span class="text-danger" asp-validation-for="SurName"></span>
+        </div>
+        <div class="form-floating">
+            <input asp-for="Name" class="form-control" placeholder="Введите имя" id="floatingInputName" />
+            <label for="floatingInputName" class="control-label">@Html.DisplayNameFor(modelItem => Model.Name)</label>
+            <span class="text-danger" asp-validation-for="Name"></span>
+        </div>
+        <div class="form-floating">
+            <input asp-for="MiddleName" class="form-control" placeholder="Введите отчество" id="floatingInputMiddleName" />
+            <label for="floatingInputMiddleName" class="control-label">@Html.DisplayNameFor(modelItem => Model.MiddleName)</label>
+            <span class="text-danger" asp-validation-for="MiddleName"></span>
+        </div>
+        <div class="form-floating">
+            <input asp-for="PhoneNumber" id="phone" class="form-control" placeholder="Введите номер телефона" id="floatingInputPhoneNumber" />
+            <label for="floatingInputPhoneNumber" class="control-label">@Html.DisplayNameFor(modelItem => Model.PhoneNumber)</label>
+            <span class="text-danger" asp-validation-for="PhoneNumber"></span>
+        </div>
+        <div class="input-group">
+            <div class="form-floating form-floating-group flex-grow-1">
+                <input asp-for="Password" class="form-control" placeholder="Введите пароль" id="floatingInputPasswordRegister" />
+                <label for="floatingInputPasswordRegister" class="control-label">@Html.DisplayNameFor(modelItem => Model.Password)</label>
+                <span class="text-danger" asp-validation-for="Password"></span>
+            </div>
+            <span class="input-group-text">
+                <i class="bi bi-eye-slash" id="togglePasswordRegister"></i>
+            </span>
+        </div>
+        <div class="input-group">
+            <div class="form-floating form-floating-group flex-grow-1">
+                <input asp-for="PasswordConfirm" class="form-control" placeholder="Подтвердите пароль" id="floatingInputPasswordRegisterConf" />
+                <label for="floatingInputPasswordRegisterConf" class="control-label">@Html.DisplayNameFor(modelItem => Model.PasswordConfirm)</label>
+                <span class="text-danger" asp-validation-for="PasswordConfirm"></span>
+            </div>
+            <span class="input-group-text">
+                <i class="bi bi-eye-slash" id="togglePasswordRegisterConf"></i>
+            </span>
+        </div>
+        <div>
+            <input class="btn btn-primary btn mt-2" type="submit" value="Регистрация" />
+        </div>
+    </form>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.2.1/dist/jquery.min.js" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/npm/jquery.maskedinput@1.4.1/src/jquery.maskedinput.js" type="text/javascript"></script>
+
+<script>
+    const togglePassword1 = document.querySelector("#togglePasswordRegister");
+    const togglePassword2 = document.querySelector("#togglePasswordRegisterConf");
+    const password1 = document.querySelector("#floatingInputPasswordRegister");
+    const password2 = document.querySelector("#floatingInputPasswordRegisterConf");
+
+    togglePassword1.addEventListener("click", function () {
+        // toggle the type attribute
+        const type = password1.getAttribute("type") === "password" ? "text" : "password";
+        password1.setAttribute("type", type);
+
+        // toggle the icon
+        this.classList.toggle("bi-eye");
+    });
+    togglePassword2.addEventListener("click", function () {
+        // toggle the type attribute
+        const type = password2.getAttribute("type") === "password" ? "text" : "password";
+        password2.setAttribute("type", type);
+
+        // toggle the icon
+        this.classList.toggle("bi-eye");
+    });
+
+    jQuery(function ($) {
+        $(function () {
+            function maskPhone() {
+                $("#phone").mask("+375(99) 999-99-99");
+            }
+            maskPhone();
+        });
+    });
+</script>

@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
-using WebService.Models.ViewModels;
 using WebService.Models.ViewModels.User;
 
 namespace WebService.Controllers.IdentityControllers
@@ -24,20 +23,6 @@ namespace WebService.Controllers.IdentityControllers
 
         [Authorize]
         public async Task<IActionResult> IndexAsync() => View(_mapper.Map<IEnumerable<UserViewModel>>(await _userService.GetUsersDetails()));
-
-        [Authorize]
-        public async Task<IActionResult> AccountProfile()
-        {
-            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-
-            return View(_mapper.Map<UserViewModel>(await _userService.GetItem(userId)));
-        }
-
-        [Authorize]
-        public async Task<IActionResult> GetUserById(int id)
-        {
-            return PartialView("../Users/DetailsPartial", _mapper.Map<UserViewModel>(await _userService.GetUserDetails(id)));
-        }
 
         [Authorize(Roles = "admin")]
         public IActionResult Create() => View();
@@ -61,19 +46,26 @@ namespace WebService.Controllers.IdentityControllers
 
                 return RedirectToAction("Index");
             }
+
             return View(model);
         }
 
         [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
-            var user = _mapper.Map<UserViewModel>(await _userService.GetItem(id));
-            if (user == null)
-            {
-                return NotFound();
-            }
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-            return View(user);
+            if (userId == id || User.IsInRole("admin"))
+            {
+                var user = _mapper.Map<UserViewModel>(await _userService.GetItem(id));
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                return View(user);
+            }
+            return RedirectToAction("UserProfile", new { id });
         }
 
         [HttpPost]
@@ -82,44 +74,27 @@ namespace WebService.Controllers.IdentityControllers
         {
             if (ModelState.IsValid)
             {
-                IdentityResult result = await _userService.UpdateUser(_mapper.Map<UserDto>(model));
-                if (result.Succeeded)
+                var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+                if ((userId == model.Id || User.IsInRole("admin")) && ModelState.IsValid)
                 {
-                    return RedirectToAction("Index");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
+                    IdentityResult result = await _userService.UpdateUser(_mapper.Map<UserDto>(model));
+                    if (result.Succeeded)
                     {
-                        ModelState.AddModelError(string.Empty, error.Description);
+                        return RedirectToAction("UserProfile", new { id = model.Id });
+                    }
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(string.Empty, error.Description);
+                        }
                     }
                 }
-
+                return RedirectToAction("UserProfile", new { id = model.Id });
             }
-            return RedirectToAction("AccountProfile");
-        }
 
-        [HttpPost]
-        [Authorize]
-        public async Task<IActionResult> ChangePersonalInfo(UserViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                IdentityResult result = await _userService.UpdateUser(_mapper.Map<UserDto>(model));
-                if (result.Succeeded)
-                {
-                    return RedirectToAction("AccountProfile");
-                }
-                else
-                {
-                    foreach (var error in result.Errors)
-                    {
-                        ModelState.AddModelError(string.Empty, error.Description);
-                    }
-                }
-
-            }
-            return RedirectToAction("AccountProfile");
+            return View(model);
         }
 
         [HttpPost]
@@ -128,10 +103,10 @@ namespace WebService.Controllers.IdentityControllers
         {
             await _userService.Delete(id);
 
-            return RedirectToAction("Index");
+            return RedirectToAction("IndexAsync");
         }
 
-        [Authorize]
+        [Authorize(Roles = "admin")]
         public async Task<IActionResult> ChangePassword(int id)
         {
             var user = _mapper.Map<UserViewModel>(await _userService.GetItem(id));
@@ -163,7 +138,7 @@ namespace WebService.Controllers.IdentityControllers
                         IdentityResult result = await _userService.SetNewPasswordAsync(user.UserName, model.NewPassword);
                         if (result.Succeeded)
                         {
-                            return RedirectToAction("Index");
+                            return RedirectToAction("UserProfile", new { id = model.Id });
                         }
                         else
                         {
@@ -179,7 +154,30 @@ namespace WebService.Controllers.IdentityControllers
                     ModelState.AddModelError(string.Empty, "Пользователь не найден");
                 }
             }
-            return RedirectToAction("AccountProfile");
+            return View(model);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> ChangePersonalPassword(int id)
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+            if (userId == id || User.IsInRole("admin"))
+            {
+                var user = _mapper.Map<UserViewModel>(await _userService.GetItem(id));
+                if (user == null)
+                {
+                    return NotFound();
+                }
+
+                ChangePasswordViewModel change = new()
+                {
+                    Id = user.Id,
+                    UserName = user.UserName
+                };
+
+                return View(change);
+            }
+            return RedirectToAction("UserProfile", new { id });
         }
 
         [HttpPost]
@@ -188,31 +186,148 @@ namespace WebService.Controllers.IdentityControllers
         {
             if (ModelState.IsValid)
             {
-                var user = _mapper.Map<UserViewModel>(await _userService.GetItem(model.Id));
-                if (user != null)
+                var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                if ((userId == model.Id || User.IsInRole("admin")) && ModelState.IsValid)
                 {
-                    if (model.OldPassword != null && model.NewPassword != null)
+                    var user = _mapper.Map<UserViewModel>(await _userService.GetItem(model.Id));
+                    if (user != null)
                     {
-                        IdentityResult result = await _userService.ChangePasswordAsync(user.UserName, model.OldPassword, model.NewPassword);
-                        if (result.Succeeded)
+                        if (model.OldPassword != null && model.NewPassword != null)
                         {
-                            return RedirectToAction("AccountProfile");
-                        }
-                        else
-                        {
-                            foreach (var error in result.Errors)
+                            IdentityResult result = await _userService.ChangePasswordAsync(user.UserName, model.OldPassword, model.NewPassword);
+                            if (result.Succeeded)
                             {
-                                ModelState.AddModelError(string.Empty, error.Description);
+                                return RedirectToAction("UserProfile", new { id = model.Id });
+                            }
+                            else
+                            {
+                                foreach (var error in result.Errors)
+                                {
+                                    ModelState.AddModelError(string.Empty, error.Description);
+                                }
                             }
                         }
                     }
+                    else
+                    {
+                        ModelState.AddModelError(string.Empty, "Пользователь не найден");
+                    }
+                }
+                return View(model);
+            }
+            return View(model);
+        }
+
+        [Authorize]
+        public async Task<IActionResult> UserProfile(int id)
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            UserViewModel user;
+
+            if (userId == id)
+            {
+                ViewData["myProfile"] = true;
+                user = _mapper.Map<UserViewModel>(await _userService.GetUserDetails(id));
+            }
+            else
+            {
+                if (id == 0)
+                {
+                    ViewData["myProfile"] = true;
+                    user = _mapper.Map<UserViewModel>(await _userService.GetUserDetails(userId));
                 }
                 else
                 {
-                    ModelState.AddModelError(string.Empty, "Пользователь не найден");
+                    ViewData["myProfile"] = false;
+                    user = _mapper.Map<UserViewModel>(await _userService.GetUserDetails(id));
                 }
             }
-            return RedirectToAction("AccountProfile");
+
+            return View(new UserChart(user!, GetChartDoughnutOfUser(user), GetChartChartBarOfUser(user)));
+        }
+
+        public Chart GetChartDoughnutOfUser(UserViewModel user)
+        {
+            List<double> data = new();
+            List<string> backgrounds = new();
+            List<string> lables = new();
+            if (user.LogExecutors != null && user.LogExecutors.Any())
+            {
+                if (user.LogExecutors.Any(_ => _.Status == RepairStatus.AtWork))
+                {
+                    data.Add(user.LogExecutors.Count(_ => _.Status == RepairStatus.AtWork));
+                    backgrounds.Add("#0d6efd");
+                    lables.Add("В работе");
+                }
+                if (user.LogExecutors.Any(_ => _.Status == RepairStatus.Check))
+                {
+                    data.Add(user.LogExecutors.Count(_ => _.Status == RepairStatus.Check));
+                    backgrounds.Add("#ffc107");
+                    lables.Add("На проверке");
+                }
+                if (user.LogExecutors.Any(_ => _.Status == RepairStatus.Completed || _.Status == RepairStatus.Archive))
+                {
+                    data.Add(user.LogExecutors.Count(_ => _.Status == RepairStatus.Completed || _.Status == RepairStatus.Archive));
+                    backgrounds.Add("#198754");
+                    lables.Add("Выполнено");
+                }
+            }
+
+            Chart chart = new()
+            {
+                Data = data.ToArray(),
+                Backgrounds = backgrounds.ToArray(),
+                Lables = lables.ToArray()
+            };
+
+            return chart;
+        }
+
+        public Chart GetChartChartBarOfUser(UserViewModel user)
+        {
+            List<double> data = new();
+            List<string> backgrounds = new();
+            List<string> lables = new();
+            if (user.LogExecutors != null && user.LogExecutors.Any())
+            {
+                var comletedLogs = user.LogExecutors.Where(_ => _.Status == RepairStatus.Archive || _.Status == RepairStatus.Completed);
+
+                if (comletedLogs.Any())
+                {
+                    var logs = comletedLogs.Where(_ => _.ChangedDate.Year == DateTime.Now.Year);
+
+                    for (int month = 1; month <= DateTime.Now.Month; month++)
+                    {
+                        data.Add(logs.Count(_ => _.ChangedDate.Month == month));
+                        backgrounds.Add("#0dcaf0");
+                        lables.Add(new DateTime(0001, month, 1).ToString("MMMM"));
+                    }
+                }
+            }
+
+            Chart chart = new()
+            {
+                Data = data.ToArray(),
+                Backgrounds = backgrounds.ToArray(),
+                Lables = lables.ToArray()
+            };
+
+            return chart;
+        }
+
+        [Authorize]
+        public async Task<IActionResult> GetUserById(int id)
+        {
+            var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+
+            if (userId == id)
+                ViewData["myProfile"] = true;
+            else ViewData["myProfile"] = false;
+
+            var user = _mapper.Map<UserViewModel>(await _userService.GetUserDetails(id));
+
+            return PartialView($"../Users/ModalUserProfile", user);
         }
     }
 }

@@ -20,7 +20,7 @@ builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 builder.Services
     .AddIdentity<User, IdentityRole<int>>(opts =>
     {
-        opts.User.AllowedUserNameCharacters = "абвгдеёжзийколмнопрстуфхцчшъщьэюяАБВГДЕЁЖЗИЙКОЛМНОПРСТУФХЦЧШЪЩЬЭЮЯabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.,_@+";
+        opts.User.AllowedUserNameCharacters = "абвгдеёжзийколмнопрстуфхцчшъщьэюяАБВГДЕЁЖЗИЙКОЛМНОПРСТУФХЦЧШЪЩЬЭЮЯabcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-.,_";
         opts.Password.RequiredLength = 4;   // минимальная длина
         opts.Password.RequireNonAlphanumeric = false;   // требуются ли не алфавитно-цифровые символы
         opts.Password.RequireLowercase = false; // требуются ли символы в нижнем регистре

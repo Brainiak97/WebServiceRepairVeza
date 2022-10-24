@@ -90,10 +90,10 @@ namespace WebService.Controllers.IdentityControllers
         public IActionResult UserList() => View(_userManager.Users.ToList());
 
         [Authorize(Roles = "admin")]
-        public async Task<IActionResult> ChangeRoles(int userId)
+        public async Task<IActionResult> ChangeRoles(int id)
         {
             // получаем пользователя
-            var user = _mapper.Map<User>(await _userService.GetItem(userId));
+            var user = _mapper.Map<User>(await _userService.GetItem(id));
             if (user != null)
             {
                 // получем список ролей пользователя
@@ -132,7 +132,7 @@ namespace WebService.Controllers.IdentityControllers
 
                 await _userManager.UpdateAsync(user);
 
-                return RedirectToAction("Index", "Users");
+                return RedirectToAction("UserProfile", "Users", new { id = userId });
             }
 
             return NotFound();

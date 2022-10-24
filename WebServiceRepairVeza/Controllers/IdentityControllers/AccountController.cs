@@ -20,7 +20,7 @@ namespace WebService.Controllers.IdentityControllers
         [HttpGet]
         public IActionResult Register()
         {
-            return PartialView("RegisterPartial");
+            return View();
         }
 
 
@@ -29,7 +29,14 @@ namespace WebService.Controllers.IdentityControllers
         {
             if (ModelState.IsValid)
             {
-                User user = new() { UserName = model.UserName, Name = model.Name, MiddleName = model.MiddleName, SurName = model.SurName, PhoneNumber = model.PhoneNumber };
+                User user = new()
+                {
+                    UserName = model.UserName,
+                    Name = model.Name,
+                    MiddleName = model.MiddleName,
+                    SurName = model.SurName,
+                    PhoneNumber = model.PhoneNumber
+                };
                 // добавляем пользователя
                 var result = await _userManager.CreateAsync(user, model.Password);
                 if (result.Succeeded)
@@ -38,7 +45,7 @@ namespace WebService.Controllers.IdentityControllers
 
                     // установка куки
                     await _signInManager.SignInAsync(user, false);
-                    return RedirectToAction("Index", "Home");
+                    return RedirectToAction("Index", "RepairLog");
                 }
                 else
                 {
@@ -49,19 +56,13 @@ namespace WebService.Controllers.IdentityControllers
                 }
             }
 
-            return View("Login", new AuthorizationViewModel
-            {
-                RegisterViewModel = model,
-            });
+            return View(model);
         }
 
         [HttpGet]
         public IActionResult Login(string? returnUrl = null)
         {
-            return View(new AuthorizationViewModel
-            {
-                LoginViewModel = new LoginViewModel { ReturnUrl = returnUrl }
-            });
+            return View(new LoginViewModel { ReturnUrl = returnUrl });
         }
 
         [HttpPost]
@@ -81,7 +82,7 @@ namespace WebService.Controllers.IdentityControllers
                     }
                     else
                     {
-                        return RedirectToAction("Index", "Home");
+                        return RedirectToAction("Index", "RepairLog");
                     }
                 }
                 else
@@ -90,10 +91,7 @@ namespace WebService.Controllers.IdentityControllers
                 }
             }
 
-            return View(new AuthorizationViewModel
-            {
-                LoginViewModel = model
-            });
+            return View(model);
         }
 
         [HttpPost]
@@ -102,7 +100,7 @@ namespace WebService.Controllers.IdentityControllers
         {
             // удаляем аутентификационные куки
             await _signInManager.SignOutAsync();
-            return RedirectToAction("Index", "Home");
+            return RedirectToAction("Login", "Account");
         }
 
     }

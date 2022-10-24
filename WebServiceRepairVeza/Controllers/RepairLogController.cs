@@ -19,7 +19,6 @@ namespace WebService.Controllers
     public class RepairLogController : Controller
     {
         private readonly RepairLogService _repairLogService;
-        private readonly RepairGroupService _repairGroupService;
         private readonly CommentService _commentService;
         private readonly UserService _userService;
         private readonly IHubContext<RepairLogDetailsHub> _repairLogDetailsHub;
@@ -29,30 +28,27 @@ namespace WebService.Controllers
 
         public RepairLogController(ILogger<RepairLogService> logger, IMapper mapper,
             IHubContext<RepairLogIndexHub> repairLogIndexHub, IHubContext<RepairLogDetailsHub> repairLogDetailsHub,
-            RepairLogService repairLogService, UserService userService, CommentService commentService, RepairGroupService repairGroupService)
+            RepairLogService repairLogService, UserService userService, CommentService commentService)
         {
             _repairLogDetailsHub = repairLogDetailsHub;
             _repairLogIndexHub = repairLogIndexHub;
             _commentService = commentService;
             _userService = userService;
             _repairLogService = repairLogService;
-            _repairGroupService = repairGroupService;
             _mapper = mapper;
             _logger = logger;
         }
 
         public async Task<IActionResult> Index()
         {
-            var userGroupsId = await _repairGroupService.GetUserGroupsId(User);
-            var allLogs = _mapper.Map<IEnumerable<RepairLogViewModel>>(await _repairLogService.GetCorrespondingLogs(userGroupsId));
+            var allLogs = _mapper.Map<IEnumerable<RepairLogViewModel>>(await _repairLogService.GetCorrespondingLogs(User));
 
-            return View(allLogs.OrderBy(_ => _.ChangedDate).Reverse());
+            return View(allLogs.Where(_ => _.Status != RepairStatus.Archive).OrderBy(_ => _.ChangedDate).Reverse());
         }
 
         public async Task<IActionResult> Archive()
         {
-            var userGroupsId = await _repairGroupService.GetUserGroupsId(User);
-            var allLogs = _mapper.Map<IEnumerable<RepairLogViewModel>>(await _repairLogService.GetCorrespondingLogs(userGroupsId));
+            var allLogs = _mapper.Map<IEnumerable<RepairLogViewModel>>(await _repairLogService.GetCorrespondingLogs(User));
 
             return View(allLogs.Where(_ => _.Status == RepairStatus.Archive).OrderBy(_ => _.ChangedDate).Reverse());
         }
@@ -69,7 +65,7 @@ namespace WebService.Controllers
 
         public async Task<IActionResult> UpdateDatails(int logId)
         {
-            var log = _mapper.Map<RepairLogViewModel>(await _repairLogService.GetItemWithAttachments(logId));
+            var log = _mapper.Map<RepairLogViewModel>(await _repairLogService.GetItem_RepairGroups_Comments_Author(logId));
 
             if (log != null)
                 return PartialView("DetailsPartial", log);
@@ -131,7 +127,7 @@ namespace WebService.Controllers
         [Authorize]
         public async Task<IActionResult> Edit(int id)
         {
-            var log = _mapper.Map<RepairLogViewModel>(await _repairLogService.GetItemWithAttachments(id));
+            var log = _mapper.Map<RepairLogViewModel>(await _repairLogService.GetItem_RepairGroups_Comments_Author(id));
             ViewData["returnUrl"] = Request.Headers["Referer"].ToString();
 
             return View(log);
@@ -363,10 +359,6 @@ namespace WebService.Controllers
             await _repairLogService.AddUsersToLogExecutors(logId, executors);
 
             string commentText = $"Заявкe #{logId} изменены исполнители";
-            if (!executors.Any())
-            {
-                await ToRequest(logId);
-            }
 
             var comment = new CommentViewModel()
             {
@@ -395,7 +387,7 @@ namespace WebService.Controllers
         [Authorize]
         public async Task<IActionResult> Details(int id)
         {
-            var log = _mapper.Map<RepairLogViewModel>(await _repairLogService.GetItemWithAttachments(id));
+            var log = _mapper.Map<RepairLogViewModel>(await _repairLogService.GetItem_RepairGroups_Comments_Author(id));
             return View(log);
         }
 
@@ -478,7 +470,7 @@ namespace WebService.Controllers
         {
             try
             {
-                var log = _mapper.Map<RepairLogViewModel>(await _repairLogService.GetItemWithAttachments(logId));
+                var log = _mapper.Map<RepairLogViewModel>(await _repairLogService.GetItem_RepairGroups_Comments_Author(logId));
                 var comm = _mapper.Map<CommentViewModel>(await _commentService.GetItem(commId));
                 var usersIds = await _userService.GetUsersIdsByRepairGroupsIds(log.RepairGroups.Select(group => group.Id).ToList());
 

@@ -17,16 +17,6 @@ namespace BLL.Services
         {
         }
 
-        public async Task<IEnumerable<int>?> GetUserGroupsId(ClaimsPrincipal user)
-        {
-            var userId = Convert.ToInt32(user.FindFirst(ClaimTypes.NameIdentifier)?.Value);
-            var groups = await _repository
-                .GetQuery()
-                .Include(_ => _.Users)
-                .ToListAsync();
-            return groups.Where(g => g.Users!.Select(u => u.Id).Contains(userId)).Select(sg => sg.Id);
-        }
-
         public async Task<IEnumerable<RepairGroupDto>?> GetUserGroups(int userId)
         {
             var groups = await _repository

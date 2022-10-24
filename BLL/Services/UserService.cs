@@ -118,7 +118,7 @@ namespace BLL.Services
 
         public async Task<IdentityResult> UpdateUser(UserDto user)
         {
-            var targetUser = await _userManager.FindByNameAsync(user.UserName);
+            var targetUser = await _userManager.FindByIdAsync(user.Id.ToString());
             targetUser.UserName = user.UserName;
             targetUser.Name = user.Name;
             targetUser.SurName = user.SurName;

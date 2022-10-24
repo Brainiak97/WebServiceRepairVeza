@@ -12,18 +12,20 @@
 <h4>Роль</h4>
 <hr />
 
-<form class="d-flex flex-column gap-2 needs-validation" novalidate asp-action="Create">
-    <div class="form-floating">
-        <input name="name" class="form-control" placeholder="Введите наименование" required />
-        <label for="name" class="control-label">Наименование роли</label>
-        <div class="invalid-feedback">
-            Введите наименование
+<div class="container row-cols-lg-3 row-cols-1 d-flex justify-content-center">
+    <form class="d-flex flex-column gap-2 needs-validation" novalidate asp-action="Create">
+        <div class="form-floating">
+            <input name="name" class="form-control" placeholder="Введите наименование" required />
+            <label for="name" class="control-label">Наименование роли</label>
+            <div class="invalid-feedback">
+                Введите наименование
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Добавить" class="btn btn-secondary" />
-    </div>
-</form>
+        <div class="form-group">
+            <input type="submit" value="Добавить" class="btn btn-secondary" />
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     @{

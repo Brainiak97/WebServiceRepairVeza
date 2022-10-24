@@ -42,7 +42,7 @@ namespace WebService.Controllers.Api
         {
             try
             {
-                var allLogs = _mapper.Map<IEnumerable<RepairLogViewModel>>(await _repairLogService.GetItemsWithAttachments());
+                var allLogs = _mapper.Map<IEnumerable<RepairLogViewModel>>(await _repairLogService.GetItems_RepairGroups());
 
                 return Ok(allLogs.ToList());
             }
@@ -58,7 +58,7 @@ namespace WebService.Controllers.Api
         {
             try
             {
-                var log = _mapper.Map<RepairLogViewModel>(await _repairLogService.GetItemWithAttachments(id));
+                var log = _mapper.Map<RepairLogViewModel>(await _repairLogService.GetItem_RepairGroups_Comments_Author(id));
 
                 return Ok(log);
             }
@@ -135,7 +135,7 @@ namespace WebService.Controllers.Api
         {
             try
             {
-                var log = _mapper.Map<RepairLogViewModel>(await _repairLogService.GetItemWithAttachments(logId));
+                var log = _mapper.Map<RepairLogViewModel>(await _repairLogService.GetItem_RepairGroups_Comments_Author(logId));
                 var comm = _mapper.Map<CommentViewModel>(await _commentService.GetItem(commId));
                 var usersIds = await _userService.GetUsersIdsByRepairGroupsIds(log.RepairGroups.Select(group => group.Id).ToList());
 

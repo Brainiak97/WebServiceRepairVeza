@@ -3,13 +3,6 @@
     ViewBag.Title = "Список пользователей";
 }
 
-<style>
-    .users{
-        margin-left: 200px;
-        margin-right: 200px;
-    }
-</style>
-
 <h2>Список пользователей</h2>
 
 @if (User.IsInRole("admin"))
@@ -17,36 +10,48 @@
     <a class="btn btn-dark" asp-action="Create"><i class="bi-journal-plus"></i> Добавить пользователя</a>
 }
 
-<div class="justify-content-center users">
-    <table class="table">
-        @foreach (var user in Model)
+<h2></h2>
+
+<div class="position-relative d-flex flex-nowrap justify-content-center">
+    <div class="accordion col-10" id="accordionPanelsStayOpenExample">
+        @foreach (var item in Model.GroupBy(_ => _.SurName[0]).OrderBy(_ => _.Key))
         {
-            <tr>
-                <th colspan="2">
-                    <h4>Информация о пользователе @user.UserName</h4>
-                </th>
-            </tr>
-            <tr>
-                <td class="col-10">
-                    @{
-                        await Html.RenderPartialAsync("DetailsPartial", user);
-                    }
-                </td>
-                @if (User.IsInRole("admin"))
-                {
-                    <td class="col-2">
-                        <form asp-action="Delete" asp-route-id="@user.Id" method="post" class="d-flex flex-column gap-2">
-                            <a class="btn btn-sm btn-primary" asp-controller="RepairGroup" asp-action="ChangeRepairGroup" asp-route-userid="@user.Id">Группы</a>
-                            <a class="btn btn-sm btn-primary" asp-controller="Roles" asp-action="ChangeRoles" asp-route-userid="@user.Id">Роли</a>
-                            <a class="btn btn-sm btn-secondary" asp-action="Edit" asp-route-id="@user.Id">Изменить</a>
-                            <a class="btn btn-sm btn-secondary" asp-action="ChangePassword" asp-route-id="@user.Id">Сменить пароль</a>
-                            <button type="submit" class="btn btn-sm btn-secondary">
-                                Удалить
-                            </button>
-                        </form>
-                    </td>
-                }
-            </tr>
+            @if (item != null)
+            {
+                <div class="accordion-item">
+                    <h2 class="accordion-header" id="panelsStayOpen-heading-@item.Key">
+                        <button class="accordion-button" type="button" data-bs-toggle="collapse" data-bs-target="#panelsStayOpen-collapse-@item.Key" aria-expanded="true" aria-controls="panelsStayOpen-collapse-@item.Key">
+                            @item.Key
+                        </button>
+                    </h2>
+                    <div id="panelsStayOpen-collapse-@item.Key" class="accordion-collapse collapse" aria-labelledby="panelsStayOpen-heading-@item.Key">
+                        <div class="accordion-body">
+                            <div class="list-group list-group-horizontal flex-wrap">
+                                @foreach (var user in item)
+                                {@if (user != null)
+                                    {
+                                        <a class="btn btn-outline-dark list-group-item d-flex flex-column align-items-center" type="button" asp-controller="Users" asp-action="UserProfile" asp-route-id="@user.Id" style="width:250px;">
+                                            <strong>@user.SurName @user.Name @user.MiddleName</strong>
+                                            @if (user.RepairGroups != null && user.RepairGroups.Count() > 0)
+                                            {
+                                                <div>
+                                                    @foreach (var itemUser in user.RepairGroups)
+                                                    {
+                                                        <span class="badge bg-info rounded-pill text-dark">
+                                                            @Html.DisplayFor(modelItem => itemUser.Name)
+                                                        </span>
+                                                    }
+                                                </div>
+                                            }
+                                            <u>@Html.DisplayFor(modelItem => user!.PhoneNumber)</u>
+                                        </a>
+                                    }
+                                }
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         }
-    </table>
+    </div>
 </div>

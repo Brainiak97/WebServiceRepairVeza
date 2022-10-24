@@ -13,7 +13,7 @@
             {
                 <!-- Button trigger modal -->
                 <button type="button" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop-@Model.Id">
-                    Назначить
+                    Исполнители
                 </button>
 
                 <!-- Modal -->
@@ -49,6 +49,15 @@
                 <form>
                     <button type="button" onclick="ToExecute(@Model.Id)" class="btn btn-sm btn-primary form-control">
                         Принять
+                    </button>
+                </form>
+            }
+
+            if (Model.Status == Core.Models.RepairStatus.Check)
+            {
+                <form>
+                    <button type="button" onclick="ToRevision(@Model.Id)" class="btn btn-sm btn-primary form-control">
+                        Доработать
                     </button>
                 </form>
             }

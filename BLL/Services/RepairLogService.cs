@@ -6,6 +6,7 @@ using DAL.Repository;
 using FluentValidation;
 using Microsoft.EntityFrameworkCore;
 using Quartz;
+using System.Security.Claims;
 
 namespace BLL.Services
 {
@@ -13,7 +14,6 @@ namespace BLL.Services
     public class RepairLogService : GenericService<RepairLog, RepairLogDto>
     {
         private readonly IRepository<RepairGroup> _repositoryRepairGroup;
-
         private readonly IRepository<User> _repositoryUser;
 
         public RepairLogService(IMapper mapper, IRepository<RepairLog> repository, IRepository<RepairGroup> repositoryRepairGroup, IRepository<User> repositoryUser,
@@ -24,7 +24,7 @@ namespace BLL.Services
             _repositoryUser = repositoryUser;
         }
 
-        public async Task<IEnumerable<RepairLogDto>> GetItemsWithAttachments()
+        public async Task<IEnumerable<RepairLogDto>> GetItems_RepairGroups()
         {
             return _mapper.Map<IEnumerable<RepairLogDto>>(await _repository
                 .GetQuery()
@@ -45,8 +45,28 @@ namespace BLL.Services
 
             return null;
         }
+        public async Task<IEnumerable<RepairLogDto>?> GetCorrespondingLogs(ClaimsPrincipal user)
+        {
+            if (user != null)
+            {
+                var userId = Convert.ToInt32(user.FindFirst(ClaimTypes.NameIdentifier)?.Value);
+                var groups = await _repositoryRepairGroup
+                    .GetQuery()
+                    .Include(_ => _.Users)
+                    .Where(g => g.Users!.Select(u => u.Id).Contains(userId)).Select(sg => sg.Id)
+                    .ToListAsync();
 
-        public async Task<RepairLogDto> GetItemWithAttachments(int id)
+                var logs = _mapper.Map<IEnumerable<RepairLogDto>>(await _repository
+                                .GetQuery()
+                                .Include(_ => _.RepairGroups)
+                                .ToListAsync());
+                return logs.Where(item => item.RepairGroups.Select(gr => gr.Id).Intersect(groups).Any() || item.AuthorId == userId);
+            }
+
+            return null;
+        }
+
+        public async Task<RepairLogDto> GetItem_RepairGroups_Comments_Author(int id)
         {
             return _mapper.Map<RepairLogDto>(await _repository
                 .GetQuery()
@@ -147,7 +167,6 @@ namespace BLL.Services
 
             if (log != null)
             {
-                log.Status = RepairStatus.AtWork;
                 log.ChangedDate = DateTime.Now;
 
                 await _repository.Update(log);
@@ -238,7 +257,6 @@ namespace BLL.Services
                     log.Executors?.Add(await _repositoryUser.Get(exec));
                 }
 
-                log.Status = RepairStatus.AtWork;
                 log.ChangedDate = DateTime.Now;
 
                 await _repository.Update(log);

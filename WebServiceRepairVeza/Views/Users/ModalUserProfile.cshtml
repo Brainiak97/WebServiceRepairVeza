@@ -1,0 +1,29 @@
+﻿@using WebService.Models.ViewModels.User
+@model WebService.Models.ViewModels.User.UserViewModel
+@{
+    ViewData["Title"] = "UserProfile";
+}
+<h2></h2>
+
+<div class="container justify-content-center d-flex">
+    <div class="col-10">
+        <div class="row d-flex align-self-center">
+            <div class="col-2">
+                <img src="~/img/ProfileImage.png" class="img-fluid" />
+            </div>
+            <div class="col-10">
+                <input type="hidden" asp-for="Id" />
+
+                <h1 class="control-label">@Html.DisplayFor(modelItem => Model.UserName)</h1>
+
+                <h2 class="control-label">@Html.DisplayFor(modelItem => Model.SurName) @Html.DisplayFor(modelItem => Model.Name) @Html.DisplayFor(modelItem => Model.MiddleName)</h2>
+
+                <u class="control-label">@Html.DisplayFor(modelItem => Model.PhoneNumber)</u>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-2">
+        <a class="btn btn-primary" asp-controller="Users" asp-action="UserProfile" asp-route-id="@Model.Id">Детали</a>
+    </div>
+</div>

@@ -13,22 +13,24 @@
 <h4>Роль</h4>
 <hr />
 
-<form class="d-flex flex-column gap-2 needs-validation" novalidate asp-action="Edit">
-    <input type="hidden" asp-for="Id" />
-    <input type="hidden" asp-for="ConcurrencyStamp" />
-    <input type="hidden" asp-for="NormalizedName" />
+<div class="container row-cols-lg-3 row-cols-1 d-flex justify-content-center">
+    <form class="d-flex flex-column gap-2 needs-validation" novalidate asp-action="Edit">
+        <input type="hidden" asp-for="Id" />
+        <input type="hidden" asp-for="ConcurrencyStamp" />
+        <input type="hidden" asp-for="NormalizedName" />
 
-    <div class="form-floating">
-        <input asp-for="Name" id="name" class="form-control" placeholder="Введите наименование" required />
-        <label for="name" class="control-label">Наименование роли</label>
-        <div class="invalid-feedback">
-            Введите наименование
+        <div class="form-floating">
+            <input asp-for="Name" id="name" class="form-control" placeholder="Введите наименование" required />
+            <label for="name" class="control-label">Наименование роли</label>
+            <div class="invalid-feedback">
+                Введите наименование
+            </div>
         </div>
-    </div>
-    <div class="form-group">
-        <input type="submit" value="Сохранить" class="btn btn-secondary" />
-    </div>
-</form>
+        <div class="form-group">
+            <input type="submit" value="Сохранить" class="btn btn-secondary" />
+        </div>
+    </form>
+</div>
 
 @section Scripts {
     @{

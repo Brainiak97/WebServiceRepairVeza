@@ -32,26 +32,26 @@
         <div class="form-group" id="controls">
             @{
                 var allGroups = await RepairGroupService.GetItems();
-                @if (allGroups.Count() > 1)
+                    @if (allGroups.Count() > 1)
                 {
-                    <div style="margin-left: 25px">
-                        <input type="checkbox" id="checkboxAll">
-                        <lable for="checkboxAll" class="form-check-label">Отметить / снять все</lable>
-                    </div>
+                        <div style="margin-left: 25px">
+                            <input type="checkbox" id="checkboxAll">
+                            <lable for="checkboxAll" class="form-check-label">Отметить / снять все</lable>
+                        </div>
                 }
-                @foreach (var group in allGroups)
+                    @foreach (var group in allGroups)
                 {
-                    <div class="form-check">
-                        <input onchange="checkRequired()" class="checkBoxClass form-check-input" id="checkbox-@group.Id" required type="checkbox" name="groups" value="@group.Name"
-                           @(Model.RepairGroups.Select(gr => gr.Name).Contains(group.Name) ? "checked=\"checked\"" : "") />
-                        <lable for="checkbox-@group.Id" class="form-check-label">@group.Name</lable>
-                        @if (allGroups.LastOrDefault() == group)
+                        <div class="form-check">
+                            <input onchange="checkRequired()" class="checkBoxClass form-check-input" id="checkbox-@group.Id" required type="checkbox" name="groups" value="@group.Name"
+                               @(Model.RepairGroups.Select(gr => gr.Name).Contains(group.Name) ? "checked=\"checked\"" : "") />
+                            <lable for="checkbox-@group.Id" class="form-check-label">@group.Name</lable>
+                            @if (allGroups.LastOrDefault() == group)
                         {
-                            <div class="invalid-feedback">
-                                Выберите хотябы одну группу
-                            </div>
+                                <div class="invalid-feedback">
+                                    Выберите хотябы одну группу
+                                </div>
                         }
-                    </div>
+                        </div>
                 }
             }
         </div>
@@ -88,7 +88,4 @@
             else $('#checkboxAll').prop('checked', true);
         });
     </script>
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
     }

@@ -1,6 +1,4 @@
 ﻿@using Microsoft.AspNetCore.Identity
-@inject SignInManager<Core.Models.User> SignInManager
-@inject UserManager<Core.Models.User> UserManager
 <!DOCTYPE html>
 <html lang="ru" heught="90vh">
 <head>
@@ -17,39 +15,39 @@
     <style type="text/css" media="all">
 
         /*.navbar .dropdown-menu-end {
-                                    right: 0;
-                                    left: auto;
-                                }
+                                                                                                            right: 0;
+                                                                                                            left: auto;
+                                                                                                        }
 
-                                .navbar .nav-item .dropdown-menu {
-                                    display: block;
-                                    opacity: 0;
-                                    visibility: hidden;
-                                    transition: .3s;
-                                    margin-top: 0;
-                                }
+                                                                                                        .navbar .nav-item .dropdown-menu {
+                                                                                                            display: block;
+                                                                                                            opacity: 0;
+                                                                                                            visibility: hidden;
+                                                                                                            transition: .3s;
+                                                                                                            margin-top: 0;
+                                                                                                        }
 
-                                .navbar .nav-item:hover .nav-link {
-                                    color: #fff;
-                                }
+                                                                                                        .navbar .nav-item:hover .nav-link {
+                                                                                                            color: #fff;
+                                                                                                        }
 
-                                .navbar .dropdown-menu.fade-down {
-                                    top: 80%;
-                                    transform: rotateX(-75deg);
-                                    transform-origin: 0% 0%;
-                                }
+                                                                                                        .navbar .dropdown-menu.fade-down {
+                                                                                                            top: 80%;
+                                                                                                            transform: rotateX(-75deg);
+                                                                                                            transform-origin: 0% 0%;
+                                                                                                        }
 
-                                .navbar .dropdown-menu.fade-up {
-                                    top: 180%;
-                                }
+                                                                                                        .navbar .dropdown-menu.fade-up {
+                                                                                                            top: 180%;
+                                                                                                        }
 
-                                .navbar .nav-item:hover .dropdown-menu {
-                                    transition: .3s;
-                                    opacity: 1;
-                                    visibility: visible;
-                                    top: 100%;
-                                    transform: rotateX(0deg);
-                                }*/
+                                                                                                        .navbar .nav-item:hover .dropdown-menu {
+                                                                                                            transition: .3s;
+                                                                                                            opacity: 1;
+                                                                                                            visibility: visible;
+                                                                                                            top: 100%;
+                                                                                                            transform: rotateX(0deg);
+                                                                                                        }*/
     </style>
 
 </head>
@@ -106,7 +104,7 @@
                             </button>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-controller="Users" asp-action="AccountProfile"><i class="bi-file-person"></i> @User.Identity.Name</a>
+                            <a class="nav-link text-dark" asp-controller="Users" asp-action="UserProfile"><i class="bi-file-person"></i> @User.Identity.Name</a>
                         </li>
                         <li class="nav-item">
                             <form id="submitForm" method="post" asp-controller="Account" asp-action="Logout">
@@ -144,27 +142,30 @@
             @RenderBody()
         </main>
     </div>
-
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/jquery/dist/jqueryui/jquery-ui.min.js"></script>
     <script src="~/lib/jquery-validation/dist/jquery.validate.js"></script>
+    <script src="~/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script src="~/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/lib/jqueryui-touch-punch/jquery.ui.touch-punch.min.js"></script>
     <script src="~/lib/OwlCarousel2/owl.carousel.js"></script>
+    <script src="~/lib/Chart.js/chart.min.js"></script>
+    <script src="~/lib/Chart.js/chartjs-plugin-datalabels/chartjs-plugin-datalabels.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 
     <script>
-        (function() {
+        (function () {
             'use strict';
-            window.addEventListener('load', function() {
+            window.addEventListener('load', function () {
                 // Fetch all the forms we want to apply custom Bootstrap validation styles to
                 var forms = document.getElementsByClassName('needs-validation');
                 // Loop over them and prevent submission
-                var validation = Array.prototype.filter.call(forms, function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (form.checkValidity() === false) {
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
+                        if (!form.checkValidity()) {
                             event.preventDefault();
                             event.stopPropagation();
                         }
@@ -174,12 +175,12 @@
             }, false);
         })();
 
-        (function() {
+        (function () {
             'use strict';
-            window.addEventListener('load', function() {
+            window.addEventListener('load', function () {
                 var forms = document.getElementsByClassName('needs-validation-checkboxes');
-                var validation = Array.prototype.filter.call(forms, function(form) {
-                    form.addEventListener('submit', function(event) {
+                var validation = Array.prototype.filter.call(forms, function (form) {
+                    form.addEventListener('submit', function (event) {
                         var failed = false;
 
                         if ($("[name='groups']:checked").length < 1) {
@@ -218,5 +219,8 @@
             }
         });
     </script>
+    @{
+        await Html.RenderPartialAsync("_ValidationScriptsPartial");
+    }
 </body>
 </html>

@@ -1,0 +1,241 @@
+﻿@model WebService.Models.ViewModels.User.UserChart
+@{
+    ViewData["Title"] = "UserProfile";
+}
+<h2></h2>
+
+<a href="javascript:history.go(-1)"
+   class="btn btn-outline-dark">
+    Вернуться
+</a>
+
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-6">
+            <div class="row d-flex align-self-center">
+                <div class="col-2">
+                    <img src="~/img/ProfileImage.png" class="img-fluid" />
+                </div>
+                <div class="col-10">
+                    <input type="hidden" asp-for="@Model.User.Id" />
+
+                    <h1 class="control-label">@Html.DisplayFor(modelItem => Model.User.UserName)</h1>
+
+                    <h2 class="control-label">@Html.DisplayFor(modelItem => Model.User.SurName) @Html.DisplayFor(modelItem => Model.User.Name) @Html.DisplayFor(modelItem => Model.User.MiddleName)</h2>
+
+                    <u class="control-label">@Html.DisplayFor(modelItem => Model.User.PhoneNumber)</u>
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+            @if (ViewData["myProfile"] != null)
+            {
+                @if (ViewData["myProfile"]!.Equals(true))
+                {
+                    <a class="btn btn-warning" asp-controller="Users" asp-action="ChangePersonalPassword" asp-route-id="@Model.User.Id">Изменить пароль</a>
+                    <a class="btn btn-warning" asp-controller="Users" asp-action="Edit" asp-route-id="@Model.User.Id">Изменить профиль</a>
+                }
+                else if (User.IsInRole("admin"))
+                {
+                    <a class="btn btn-warning" asp-controller="RepairGroup" asp-action="ChangeRepairGroup" asp-route-id="@Model.User.Id">Изменить группы</a>
+                    <a class="btn btn-warning" asp-controller="Roles" asp-action="ChangeRoles" asp-route-id="@Model.User.Id">Изменить роли</a>
+                    <a class="btn btn-warning" asp-controller="Users" asp-action="ChangePassword" asp-route-id="@Model.User.Id">Изменить пароль</a>
+                    <a class="btn btn-warning" asp-controller="Users" asp-action="Edit" asp-route-id="@Model.User.Id">Изменить профиль</a>
+                    <a class="btn btn-danger" asp-controller="Users" asp-action="Delete" asp-route-id="@Model.User.Id">Удалить профиль</a>
+                }
+            }
+        </div>
+    </div>
+    <hr />
+    <div class="row justify-content-center">
+        <div class="col-4">
+            <canvas id="allLogsChart"></canvas>
+        </div>
+        <div class="col-8">
+            <canvas id="completeLogsChart"></canvas>
+        </div>
+    </div>
+</div>
+
+<script src="~/lib/Chart.js/chart.js"></script>
+<script src="~/lib/Chart.js/chartjs-plugin-datalabels/chartjs-plugin-datalabels.js"></script>
+
+<script type="text/javascript">
+    //const month = ["Январь", "Февраль", "Март", "Апрель", "Май", "Июнь", "Июль", "Август", "Сентябрь", "Октябрь", "Ноябрь", "Декабрь"];
+
+    //const d = new Date();
+    //let name = month[d.getMonth()];
+
+    Chart.register(ChartDataLabels);
+
+    Chart.Tooltip.positioners.mousePosition = function (elements, eventPosition) {
+        const tooltip = this;
+
+        return {
+            x: eventPosition.x,
+            y: eventPosition.y
+        };
+    };
+
+    var ctx_allLogsChart = document.getElementById('allLogsChart').getContext('2d');
+    var myChart = new Chart(ctx_allLogsChart, {
+        plugins: [{
+            afterDraw: chart => {
+                if (chart.data.datasets[0].data.length === 0) {
+                    ctx_allLogsChart.save();
+                    ctx_allLogsChart.textAlign = 'center';
+                    ctx_allLogsChart.textBaseline = 'middle';
+                    ctx_allLogsChart.font = "22px";
+                    ctx_allLogsChart.fillStyle = "gray";
+                    ctx_allLogsChart.fillText('Нет данных для отображения диаграммы', chart.width / 2, chart.height / 2);
+                    ctx_allLogsChart.restore();
+                }
+            }
+        }],
+        type: 'doughnut',
+        data: {
+            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ChartDoughnut.Lables)),
+            datasets: [{
+                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ChartDoughnut.Data)),
+                backgroundColor: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ChartDoughnut.Backgrounds)),
+                borderWidth: 0.5,
+                borderColor: '#ddd',
+                hoverOffset: 4
+            }]
+        },
+        options: {
+            plugins: {
+                tooltip: {
+                    position: 'mousePosition'
+                },
+                datalabels: {
+                    padding: 8,
+                    color: 'white',
+                    font: {
+                        size: 24,
+                        weight: 'bold'
+                    },
+                    display: true,
+                    formatter: function (value, ctx) {
+                        return value;
+                    },
+                },
+                legend: {
+                    display: true,
+                    position: 'bottom',
+                    labels: {
+                        color: 'black',
+                        boxWidth: 20,
+                        font: {
+                            size: 16,
+                            weight: 'bold'
+                        },
+                        padding: 15
+                    }
+                },
+                title: {
+                    display: true,
+                    text: 'Общая статистика',
+                    color: 'black',
+                    font: {
+                        size: 30
+                    },
+                    position: 'top',
+                    padding: 20
+                }
+            }
+        }
+    });
+
+    var ctx_completeLogsChart = document.getElementById('completeLogsChart').getContext('2d');
+    var myChart = new Chart(ctx_completeLogsChart, {
+        plugins: [{
+            afterDraw: chart => {
+                if (chart.data.datasets[0].data.length === 0) {
+                    ctx_completeLogsChart.save();
+                    ctx_completeLogsChart.textAlign = 'center';
+                    ctx_completeLogsChart.textBaseline = 'middle';
+                    ctx_completeLogsChart.font = "22px";
+                    ctx_completeLogsChart.fillStyle = "gray";
+                    ctx_completeLogsChart.fillText('Нет данных для отображения диаграммы', chart.width / 2, chart.height / 2);
+                    ctx_completeLogsChart.restore();
+                }
+            }
+        }],
+        type: 'bar',
+        data: {
+            labels: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ChartBar.Lables)),
+            datasets: [{
+                data: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ChartBar.Data)),
+                backgroundColor: @Html.Raw(Newtonsoft.Json.JsonConvert.SerializeObject(Model.ChartBar.Backgrounds)),
+                borderWidth: 0.5,
+                borderColor: '#ddd',
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    ticks: {
+                        callback: function (value) {
+                            if (value % 1 === 0) { return value; }
+                        }
+                    }
+                }
+            },
+            plugins: {
+                legend: {
+                    display: false
+                },
+                tooltip: {
+                    position: 'mousePosition',
+                    callbacks: {
+                        labelPointStyle: function (context) {
+                            return {};
+                        },
+                        title: function () {
+                            return '';
+                        },
+                        label: function (context) {
+                            let label = context.dataset.label || '';
+
+                            if (label) {
+                                label += ': ';
+                            }
+                            if (context.parsed.y !== null) {
+                                label += context.parsed.y;
+                            }
+
+                            let date = new Date('2022-' + Number(context.parsed.x + 1) + '-3').toLocaleString('ru', {
+                                month: 'long'
+                            });
+
+                            return 'За ' + date + ' выполнено: ' + label;
+                        }
+                    }
+                },
+                datalabels: {
+                    padding: 8,
+                    color: 'white',
+                    font: {
+                        size: 24,
+                        weight: 'bold'
+                    },
+                    display: true,
+                    formatter: function (value, ctx) {
+                        return value;
+                    },
+                },
+                title: {
+                    display: true,
+                    text: 'Статистика выполенных задач за @DateTime.Now.Year год',
+                    color: 'black',
+                    font: {
+                        size: 30
+                    },
+                    position: 'top',
+                    padding: 20
+                }
+            }
+        }
+    });
+</script>

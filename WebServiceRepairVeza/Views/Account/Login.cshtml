@@ -1,65 +1,61 @@
 ﻿@using WebService.Models.ViewModels.Account
-@model AuthorizationViewModel
+@model LoginViewModel
 
-<style media="(min-width: 1400px)">
-    .tab-content {
-        border-left: 1px solid #ddd;
-        border-right: 1px solid #ddd;
-        border-bottom: 1px solid #ddd;
-        padding: 10px;
+<style>
+    .form-floating-group input {
+        border-bottom-right-radius: 0;
+        border-top-right-radius: 0;
     }
 
-    .tab-content, .nav-tabs {
-        margin-left: 25%;
-        margin-right: 25%;
+    #togglePasswordLogin {
+        cursor: pointer;
     }
 </style>
 
-<div class="row m-5 justify-content-center">
-    <div class="col-sm-10 col-md-6">
-        <nav>
-            <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
-                <button class="nav-link active" id="nav-login-tab" data-bs-toggle="tab" data-bs-target="#nav-login" type="button" role="tab" aria-controls="nav-login" aria-selected="true">Вход</button>
-                <button class="nav-link" id="nav-register-tab" data-bs-toggle="tab" data-bs-target="#nav-register" type="button" role="tab" aria-controls="nav-register" aria-selected="false">Регистрация</button>
-            </div>
-        </nav>
-        <div class="tab-content" id="nav-tabContent">
-            <div class="tab-pane fade show @(Model.LoginViewModel == null ? "" : " active")" id="nav-login" role="tabpanel" aria-labelledby="nav-login-tab">
-                @{
-                    await Html.RenderPartialAsync("LoginPartial", Model.LoginViewModel);
-                }
-            </div>
-            <div class="tab-pane fade @(Model.RegisterViewModel == null ? "" : " active")" id="nav-register" role="tabpanel" aria-labelledby="nav-register-tab">
-                @{
-                    await Html.RenderPartialAsync("RegisterPartial", Model.RegisterViewModel);
-                }
-            </div>
+<h2></h2>
+
+<div class="container row-cols-lg-3 d-flex justify-content-center">
+    <form class="loginForm d-flex flex-column gap-2 needs-validation" novalidate method="post" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model?.ReturnUrl">
+        <legend>
+            Введите свои учетные данные.<br>
+            @Html.ActionLink("У меня нет аккаунта", "Register")
+        </legend>
+
+        <div class="validation text-danger" asp-validation-summary="ModelOnly"></div>
+
+        <div class="form-floating">
+            <input asp-for="UserName" class="form-control" placeholder="Введите логин" id="fiUserNameLogin" required />
+            <label for="fiUserNameLogin" class="control-label">@Html.DisplayNameFor(modelItem => Model.UserName)</label>
         </div>
-    </div>
+        <div class="input-group">
+            <div class="form-floating form-floating-group flex-grow-1">
+                <input asp-for="Password" class="form-control" placeholder="Введите пароль" id="floatingInputPasswordLogin" required />
+                <label for="floatingInputPasswordLogin" class="control-label">@Html.DisplayNameFor(modelItem => Model.Password)</label>
+            </div>
+            <span class="input-group-text">
+                <i class="bi bi-eye-slash" id="togglePasswordLogin"></i>
+            </span>
+        </div>
+        <div class="form-group">
+            <label asp-for="RememberMe" class="control-label"></label>
+            <input asp-for="RememberMe" />
+        </div>
+        <div>
+            <input class="btn btn-primary" type="submit" value="Войти" />
+        </div>
+    </form>
 </div>
 
-@section Scripts {
-    @{
-        await Html.RenderPartialAsync("_ValidationScriptsPartial");
-    }
+<script>
+    const togglePassword = document.querySelector("#togglePasswordLogin");
+    const password = document.querySelector("#floatingInputPasswordLogin");
 
-    <script>
-        (function() {
-            'use strict';
-            window.addEventListener('load', function() {
-                // Fetch all the forms we want to apply custom Bootstrap validation styles to
-                var forms = document.getElementsByClassName('needs-validation');
-                // Loop over them and prevent submission
-                var validation = Array.prototype.filter.call(forms, function(form) {
-                    form.addEventListener('submit', function(event) {
-                        if (form.checkValidity() === false) {
-                            event.preventDefault();
-                            event.stopPropagation();
-                        }
-                        form.classList.add('was-validated');
-                    }, false);
-                });
-            }, false);
-        })();
-    </script>
-    }
+    togglePassword.addEventListener("click", function () {
+        // toggle the type attribute
+        const type = password.getAttribute("type") === "password" ? "text" : "password";
+        password.setAttribute("type", type);
+
+        // toggle the icon
+        this.classList.toggle("bi-eye");
+    });
+</script>

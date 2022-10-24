@@ -20,6 +20,14 @@
     {
       "library": "OwlCarousel2@2.3.4",
       "destination": "wwwroot/lib/OwlCarousel2/"
+    },
+    {
+      "library": "Chart.js@3.9.1",
+      "destination": "wwwroot/lib/Chart.js/"
+    },
+    {
+      "library": "chartjs-plugin-datalabels@2.1.0",
+      "destination": "wwwroot/lib/Chart.js/chartjs-plugin-datalabels/"
     }
   ]
 }
