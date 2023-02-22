@@ -79,7 +79,7 @@ namespace WebService.Controllers.IdentityControllers
         [Authorize(Roles = "admin")]
         public async Task<IActionResult> Delete(int id)
         {
-            IdentityRole<int> role = await _roleManager.FindByIdAsync(id.ToString());
+            var role = await _roleManager.FindByIdAsync(id.ToString());
             if (role != null)
             {
                 await _roleManager.DeleteAsync(role);

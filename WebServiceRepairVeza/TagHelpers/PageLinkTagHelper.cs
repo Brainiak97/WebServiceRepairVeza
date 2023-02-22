@@ -27,14 +27,11 @@ namespace WebService.TagHelpers
                 IUrlHelper urlHelper = urlHelperFactory.GetUrlHelper(ViewContext);
                 output.TagName = "div";
 
-                // набор ссылок будет представлять список ul
                 TagBuilder tag = new("ul");
                 tag.AddCssClass("pagination");
 
-                // формируем три ссылки - на текущую, предыдущую и следующую
                 TagBuilder currentItem = CreateTag(PageModel.PageNumber, urlHelper);
 
-                // создаем ссылки на предыдущую страницу, если она есть
                 if (PageModel.HasPreviousPage)
                 {
                     for (int i = 1; i < PageModel.PageNumber; i++)
@@ -45,7 +42,7 @@ namespace WebService.TagHelpers
                 }
 
                 tag.InnerHtml.AppendHtml(currentItem);
-                // создаем ссылку на следующую страницу, если она есть
+
                 if (PageModel.HasNextPage)
                 {
                     for (int i = PageModel.PageNumber + 1; i < PageModel.TotalPages + 1; i++)

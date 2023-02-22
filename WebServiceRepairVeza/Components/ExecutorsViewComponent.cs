@@ -22,7 +22,6 @@ namespace WebService.Components
 
         public async Task<IViewComponentResult> InvokeAsync(int logId, int userId)
         {
-            // получем список групп пользователя
             var log = await _repairLogService.GetItem_RepairGroups_Comments_Author(logId);
             var logGroupsId = log.RepairGroups?.Select(g => g.Id).ToList();
             

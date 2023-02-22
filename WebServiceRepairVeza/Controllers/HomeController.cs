@@ -9,12 +9,10 @@ namespace WebService.Controllers
     public class HomeController : Controller
     {
         private readonly NotificationService _notificationService;
-        private readonly UserService _userService;
 
-        public HomeController(NotificationService notificationService, UserService userService)
+        public HomeController(NotificationService notificationService)
         {
             _notificationService = notificationService;
-            _userService = userService;
         }
 
         public IActionResult Index()

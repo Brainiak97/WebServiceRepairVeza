@@ -250,7 +250,6 @@ namespace BLL.Services
             {
                 log.Executors?.Add(await _repositoryUser.Get(userId));
 
-                log.Status = RepairStatus.AtWork;
                 log.ChangedDate = DateTime.Now;
 
                 await _repository.Update(log);

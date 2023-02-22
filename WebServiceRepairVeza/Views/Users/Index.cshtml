@@ -30,7 +30,7 @@
                                 @foreach (var user in item)
                                 {@if (user != null)
                                     {
-                                        <a class="btn btn-outline-dark list-group-item d-flex flex-column align-items-center" type="button" asp-controller="Users" asp-action="UserProfile" asp-route-id="@user.Id" style="width:250px;">
+                                        <a class="btn btn-outline-dark list-group-item d-flex flex-column align-items-center" asp-controller="Users" asp-action="UserProfile" asp-route-id="@user.Id" style="width:250px;">
                                             <strong>@user.SurName @user.Name @user.MiddleName</strong>
                                             @if (user.RepairGroups != null && user.RepairGroups.Count() > 0)
                                             {

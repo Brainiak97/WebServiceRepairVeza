@@ -5,8 +5,6 @@ namespace WebService
 {
     public class WebManifest
     {
-        //
-
         //     The absolute file path to Web App Manifest file.
         [JsonIgnore]
         public string? FileName
@@ -14,8 +12,6 @@ namespace WebService
             get;
             internal set;
         }
-
-        //
 
         //     The raw JSON from the manifest file.
         [JsonIgnore]
@@ -25,8 +21,6 @@ namespace WebService
             internal set;
         }
 
-        //
-
         //     A name for use in the Web App Install banner.
         [JsonProperty("name")]
         public string? Name
@@ -34,8 +28,6 @@ namespace WebService
             get;
             set;
         }
-
-        //
 
         //     A short_name for use as the text on the users home screen.
         [JsonProperty("short_name")]
@@ -45,8 +37,6 @@ namespace WebService
             set;
         }
 
-        //
-
         //     Provides a general description of what the web application does.
         [JsonProperty("description")]
         public string? Description
@@ -54,8 +44,6 @@ namespace WebService
             get;
             set;
         }
-
-        //
 
         //     .
         [JsonProperty("iarc_rating_id")]
@@ -65,8 +53,6 @@ namespace WebService
             set;
         }
 
-        //
-
         //     .
         [JsonProperty("categories")]
         public IEnumerable<string>? Categories
@@ -74,8 +60,6 @@ namespace WebService
             get;
             set;
         }
-
-        //
 
         //     Specifies the primary text direction for the name, short_name, and description
         //     members. Together with the lang member, it can help provide the correct display
@@ -87,8 +71,6 @@ namespace WebService
             set;
         }
 
-        //
-
         //     Specifies the primary language for the values in the name and short_name members.
         //     This value is a string containing a single language tag.
         [JsonProperty("lang")]
@@ -97,8 +79,6 @@ namespace WebService
             get;
             set;
         }
-
-        //
 
         //     If you don't provide a start_url, the current page is used, which is unlikely
         //     to be what your users want.
@@ -109,8 +89,6 @@ namespace WebService
             set;
         }
 
-        //
-
         //     A list of icons.
         [JsonProperty("icons")]
         public IEnumerable<Icon>? Icons
@@ -118,8 +96,6 @@ namespace WebService
             get;
             set;
         }
-
-        //
 
         //     A hex color value.
         [JsonProperty("background_color")]
@@ -129,8 +105,6 @@ namespace WebService
             set;
         }
 
-        //
-
         //     A hex color value.
         [JsonProperty("theme_color")]
         public string? ThemeColor
@@ -138,8 +112,6 @@ namespace WebService
             get;
             set;
         }
-
-        //
 
         //     Defines the developer's preferred display mode for the web application.
         [JsonProperty("display")]
@@ -156,8 +128,6 @@ namespace WebService
             set;
         }
 
-        //
-
         //     pecifies a boolean value that hints for the user agent to indicate to the user
         //     that the specified related applications are available, and recommended over the
         //     web application.
@@ -168,8 +138,6 @@ namespace WebService
             set;
         }
 
-        //
-
         //     Specifies an array of "application objects" representing native applications
         //     that are installable by, or accessible to, the underlying platform.
         [JsonProperty("related_applications")]
@@ -179,8 +147,6 @@ namespace WebService
             set;
         }
 
-        //
-
         //     Defines the navigation scope of this web application's application context.
         [JsonProperty("scope")]
         public string? Scope
@@ -188,8 +154,6 @@ namespace WebService
             get;
             set;
         }
-
-        //
 
         //     Check if the manifest is valid
         public bool IsValid(out string error)

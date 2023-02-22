@@ -79,37 +79,37 @@ namespace WebService.Controllers
 
         // POST: RepairLog/Create
         [HttpPost]
-        public async Task<IActionResult> Create(RepairLogViewModel createModel, List<string> groups)
+        public async Task<IActionResult> Create(RepairLogViewModel newRepairLog, List<string> groups)
         {
-            if (!ModelState.IsValid || groups.Count == 0)
+            if (newRepairLog.Malfunctions == string.Empty || groups.Count == 0)
             {
-                return View(createModel);
+                return View(newRepairLog);
             }
             try
             {
                 var userId = Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value);
 
-                createModel.Author = _mapper.Map<UserViewModel>(await _userService.GetItem(userId));
-                createModel.AuthorId = userId;
-                createModel.Status = RepairStatus.Request;
-                createModel.RequestDate = DateTime.Now;
-                createModel.ChangedDate = createModel.RequestDate;
+                newRepairLog.Author = _mapper.Map<UserViewModel>(await _userService.GetItem(userId));
+                newRepairLog.AuthorId = userId;
+                newRepairLog.Status = RepairStatus.Request;
+                newRepairLog.RequestDate = DateTime.Now;
+                newRepairLog.ChangedDate = DateTime.Now;
 
-                var createdLog = _mapper.Map<RepairLogDto>(createModel);
-                await _repairLogService.Create(createdLog);
-                await _repairLogService.EditGroupsIntoRepairLogAsync(createdLog.Id, groups);
+                var createdRepairLog = _mapper.Map<RepairLogDto>(newRepairLog);
+                await _repairLogService.Create(createdRepairLog);
+                await _repairLogService.EditGroupsIntoRepairLogAsync(createdRepairLog.Id, groups);
 
                 var comment = new CommentViewModel()
                 {
                     Date = DateTime.Now,
-                    Text = $"Заявка #{createdLog.Id} создана",
-                    RepairLogId = createdLog.Id,
-                    CommentatorId = createdLog.AuthorId,
+                    Text = $"Заявка #{createdRepairLog.Id} создана",
+                    RepairLogId = createdRepairLog.Id,
+                    CommentatorId = createdRepairLog.AuthorId,
                 };
 
                 await AddServerComment(comment);
 
-                var createdLogMap = _mapper.Map<RepairLogViewModel>(createdLog);
+                var createdLogMap = _mapper.Map<RepairLogViewModel>(createdRepairLog);
 
                 await _repairLogIndexHub.Clients.Group("RepairLogIndex").SendAsync("CreateLog", await ControllerExtensions.RenderViewAsync(this, "IndexPartial", createdLogMap, true));
 
@@ -178,7 +178,7 @@ namespace WebService.Controllers
         {
             try
             {
-                await _repairLogService.ToExecute(id);
+                await _repairLogService.AddUserToLogExecutors(id, Convert.ToInt32(User.FindFirst(ClaimTypes.NameIdentifier)?.Value));
 
                 var comment = new CommentViewModel()
                 {

@@ -9,7 +9,7 @@
 	</PropertyGroup>
 
 	<PropertyGroup>
-		<TargetFramework>net6.0</TargetFramework>
+		<TargetFramework>net7.0</TargetFramework>
 		<Nullable>enable</Nullable>
 		<ImplicitUsings>enable</ImplicitUsings>
 		<UserSecretsId>aspnet-WebService-419851F5-5483-4412-BB05-39E44B6356DC</UserSecretsId>
@@ -30,18 +30,18 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<PackageReference Include="AutoMapper.Extensions.ExpressionMapping" Version="5.1.0" />
+		<PackageReference Include="AutoMapper.Extensions.ExpressionMapping" Version="6.0.3" />
 		<PackageReference Include="Chart.js" Version="3.7.1" />
-		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.2.1" />
-		<PackageReference Include="jQuery" Version="3.6.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="6.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="6.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="6.0.8" />
-		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="6.0.8" />
-		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.8" />
-		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="6.0.2" />
-		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.4.0" />
-		<PackageReference Include="Scrutor" Version="4.2.0" />
+		<PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.5.1" />
+		<PackageReference Include="jQuery" Version="3.6.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Diagnostics.EntityFrameworkCore" Version="7.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Identity.UI" Version="7.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.3" />
+		<PackageReference Include="Microsoft.AspNetCore.SignalR.Client" Version="7.0.3" />
+		<PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="7.0.4" />
+		<PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="7.0.0" />
+		<PackageReference Include="Quartz.Extensions.Hosting" Version="3.6.0" />
+		<PackageReference Include="Scrutor" Version="4.2.1" />
 		<PackageReference Include="WebEssentials.AspNetCore.PWA" Version="1.0.65" />
 	</ItemGroup>
 

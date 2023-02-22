@@ -26,7 +26,7 @@
     </tr>
 </template>
 
-@if ((Core.Models.RepairStatus)ViewData["status"] != Core.Models.RepairStatus.Archive)
+@if ((Core.Models.RepairStatus)ViewData["status"]! != Core.Models.RepairStatus.Archive)
 {
     <form id="commentForm" class="d-flex flex-column gap-2 needs-validation-norefresh" novalidate>
         <input id="hiddenLogId" type="hidden" asp-for="RepairLogId" />

@@ -16,10 +16,9 @@
 
 <div class="container row-cols-lg-3 d-flex justify-content-center">
     <form id="contact-form" class="d-flex flex-column gap-2" method="post" asp-controller="Account" asp-action="Register">
-        <legend>
+        <h2>
             Впервые здесь?<br>
-            @Html.ActionLink("У меня уже есть аккаунт", "Login")
-        </legend>
+        </h2>
 
         <div class="form-floating">
             <input asp-for="UserName" class="form-control" placeholder="Введите логин" id="floatingInputUserNameRegister" />
@@ -42,7 +41,7 @@
             <span class="text-danger" asp-validation-for="MiddleName"></span>
         </div>
         <div class="form-floating">
-            <input asp-for="PhoneNumber" id="phone" class="form-control" placeholder="Введите номер телефона" id="floatingInputPhoneNumber" />
+            <input asp-for="PhoneNumber" class="form-control" placeholder="Введите номер телефона" id="floatingInputPhoneNumber" />
             <label for="floatingInputPhoneNumber" class="control-label">@Html.DisplayNameFor(modelItem => Model.PhoneNumber)</label>
             <span class="text-danger" asp-validation-for="PhoneNumber"></span>
         </div>
@@ -66,8 +65,11 @@
                 <i class="bi bi-eye-slash" id="togglePasswordRegisterConf"></i>
             </span>
         </div>
-        <div>
-            <input class="btn btn-primary btn mt-2" type="submit" value="Регистрация" />
+        <div class="form-group">
+            <input class="btn btn-primary" type="submit" value="Регистрация" />
+            <h7>
+                @Html.ActionLink("У меня уже есть аккаунт", "Login")
+            </h7>
         </div>
     </form>
 </div>
@@ -101,7 +103,7 @@
     jQuery(function ($) {
         $(function () {
             function maskPhone() {
-                $("#phone").mask("+375(99) 999-99-99");
+                $("#floatingInputPhoneNumber").mask("+375(99) 999-99-99");
             }
             maskPhone();
         });

@@ -11,14 +11,12 @@ namespace WebService.Controllers.Api
     {
         private readonly RepairGroupService _repairGroupService;
 
-        private readonly ILogger<RepairGroupApiController> _logger;
         private readonly IMapper _mapper;
 
-        public RepairGroupApiController(ILogger<RepairGroupApiController> logger, IMapper mapper, RepairGroupService repairGroupService, UserService userService)
+        public RepairGroupApiController(IMapper mapper, RepairGroupService repairGroupService)
         {
             _repairGroupService = repairGroupService;
             _mapper = mapper;
-            _logger = logger;
         }
 
         public async Task<IActionResult> GetAll()

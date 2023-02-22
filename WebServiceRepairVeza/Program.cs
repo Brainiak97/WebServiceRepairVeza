@@ -110,14 +110,20 @@ app.UseRouting();
 app.UseAuthentication();
 app.UseAuthorization();
 
-app.UseEndpoints(endpoints =>
-{
-    endpoints.MapControllers();
-    endpoints.MapHub<CommentHub>("/comments");
-    endpoints.MapHub<NotificationHub>("/notifications");
-    endpoints.MapHub<RepairLogIndexHub>("/repairlogindex");
-    endpoints.MapHub<RepairLogDetailsHub>("/repairlogdetails");
-});
+//app.UseEndpoints(endpoints =>
+//{
+//    endpoints.MapControllers();
+//    endpoints.MapHub<CommentHub>("/comments");
+//    endpoints.MapHub<NotificationHub>("/notifications");
+//    endpoints.MapHub<RepairLogIndexHub>("/repairlogindex");
+//    endpoints.MapHub<RepairLogDetailsHub>("/repairlogdetails");
+//});
+
+app.MapControllers();
+app.MapHub<CommentHub>("/comments");
+app.MapHub<NotificationHub>("/notifications");
+app.MapHub<RepairLogIndexHub>("/repairlogindex");
+app.MapHub<RepairLogDetailsHub>("/repairlogdetails");
 
 app.MapControllerRoute(
     name: "default",

@@ -12,12 +12,10 @@ namespace WebService.Controllers.Api
     [ApiController]
     public class UsersApiController : ControllerBase
     {
-        readonly IMapper _mapper;
-        readonly UserService _userService;
+        private readonly UserService _userService;
 
-        public UsersApiController(IMapper mapper, UserService userService)
+        public UsersApiController(UserService userService)
         {
-            _mapper = mapper;
             _userService = userService;
         }
 

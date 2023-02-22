@@ -81,8 +81,6 @@
     })
 
     notifConnection.on('NewMessage', (sender, messageText, messageDate, commentId, logId) => {
-        console.log(`${sender}: ${messageText} ${messageDate}`);
-
         var tempClone = template.content.cloneNode(true);
         var commentator = tempClone.getElementById('commentator');
         var text = tempClone.getElementById('text');

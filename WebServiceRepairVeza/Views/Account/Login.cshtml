@@ -16,21 +16,20 @@
 
 <div class="container row-cols-lg-3 d-flex justify-content-center">
     <form class="loginForm d-flex flex-column gap-2 needs-validation" novalidate method="post" asp-controller="Account" asp-action="Login" asp-route-returnUrl="@Model?.ReturnUrl">
-        <legend>
+        <h2>
             Введите свои учетные данные.<br>
-            @Html.ActionLink("У меня нет аккаунта", "Register")
-        </legend>
+        </h2>
 
         <div class="validation text-danger" asp-validation-summary="ModelOnly"></div>
 
         <div class="form-floating">
             <input asp-for="UserName" class="form-control" placeholder="Введите логин" id="fiUserNameLogin" required />
-            <label for="fiUserNameLogin" class="control-label">@Html.DisplayNameFor(modelItem => Model.UserName)</label>
+            <label for="fiUserNameLogin" class="control-label">@Html.DisplayNameFor(modelItem => Model!.UserName)</label>
         </div>
         <div class="input-group">
             <div class="form-floating form-floating-group flex-grow-1">
                 <input asp-for="Password" class="form-control" placeholder="Введите пароль" id="floatingInputPasswordLogin" required />
-                <label for="floatingInputPasswordLogin" class="control-label">@Html.DisplayNameFor(modelItem => Model.Password)</label>
+                <label for="floatingInputPasswordLogin" class="control-label">@Html.DisplayNameFor(modelItem => Model!.Password)</label>
             </div>
             <span class="input-group-text">
                 <i class="bi bi-eye-slash" id="togglePasswordLogin"></i>
@@ -40,8 +39,11 @@
             <label asp-for="RememberMe" class="control-label"></label>
             <input asp-for="RememberMe" />
         </div>
-        <div>
+        <div class="form-group">
             <input class="btn btn-primary" type="submit" value="Войти" />
+            <h7>
+                @Html.ActionLink("У меня нет аккаунта", "Register")
+            </h7>
         </div>
     </form>
 </div>
